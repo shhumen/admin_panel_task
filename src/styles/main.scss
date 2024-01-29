@@ -1,0 +1,119 @@
+@import './variables';
+@import './table';
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--Neutral-Colors-800, $primary);
+  font-family: 'Mona-Sans', sans-serif;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Mona-Sans';
+  src: url('../shared/media/fonts/Mona-Sans-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Mona-Sans';
+  src: url('../shared/media/fonts/Mona-Sans-Medium.ttf');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Mona-Sans';
+  src: url('../shared/media/fonts/Mona-Sans-SemiBold.ttf');
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: 'Mona-Sans';
+  src: url('../shared/media/fonts/Mona-Sans-Bold.ttf');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'Mona-Sans';
+  src: url('../shared/media/fonts/Mona-Sans-ExtraBold.ttf');
+  font-weight: 800;
+}
+
+.ant-layout,
+.ant-layout-sider {
+  background: $primary;
+}
+.ant-layout-sider {
+  height: 100vh;
+  box-shadow: 0px 8px 28px 0px rgba(1, 5, 17, 0.3);
+}
+
+.ant-layout-sider-children {
+  background-color: $primary !important;
+}
+
+.ant-layout-sider-collapsed {
+  img {
+    margin: 20px;
+  }
+  p {
+    display: none;
+  }
+}
+
+.ant-menu-item svg {
+  font-size: 20px;
+}
+
+.ant-menu.ant-menu-inline-collapsed {
+  background-color: $primary;
+  color: $white;
+}
+
+.ant-menu.ant-menu-item-active {
+  color: $light;
+  background-color: $secondary !important;
+}
+
+.ant-menu-title-content a {
+  text-decoration: none !important;
+}
+
+.ant-menu-title-content-active {
+  background-color: $secondary2;
+}
+
+.ant-menu-light.ant-menu-root.ant-menu-inline {
+  background-color: $primary;
+  color: $light;
+}
+
+.ant-menu-light .ant-menu-item-selected {
+  background-color: $secondary;
+  border-left: 5px solid $secondary2;
+  color: $white;
+}
+
+:not(.ant-menu-item-selected):hover svg {
+  color: $light;
+}
+:not(.ant-menu-item-selected):hover {
+  color: $white;
+}
+
+.ant-btn.ant-btn-icon-only {
+  background-color: $primary;
+  color: $light !important;
+}
+.ant-btn.ant-btn-icon-only:hover {
+  background-color: $secondary !important;
+  color: $white !important;
+}
+
+.ant-card {
+  background-color: #1f1f3b;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px !important;
+  margin: 10px;
+}
