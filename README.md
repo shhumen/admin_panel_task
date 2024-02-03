@@ -124,3 +124,13 @@ const [switch,setSwitch] = useState({
 closeAll:true,
 view:true,
 })
+
+const RenderIf = ({ children, conditions, renderelse }) => {
+if (conditions) {
+return children
+} else if (renderelse) {
+return renderelse;
+}
+};
+
+export default RenderIf;

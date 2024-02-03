@@ -1,16 +1,15 @@
 @import '@/styles/variables';
+@import '@/styles/mixins';
 .Home {
   color: $light;
-  margin: 20px;
-  padding: 40px;
+  margin: 20px 35px;
 
   h3 {
     color: $white;
   }
 
   .card_header {
-    display: flex;
-    align-items: center;
+    @include flexBox(null);
 
     .card_title {
       margin-left: 20px;
@@ -32,13 +31,11 @@
     .users_icon,
     .projects_icon,
     .reports_icon {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      @include flexBox(center);
       width: 50px;
       height: 50px;
       border-radius: 50%;
-      background-color: $secondary2;
+      background-color: $secondary2-dark;
       img {
         width: 30px;
         height: 30px;
@@ -68,7 +65,7 @@
     margin-top: 20px;
     font-weight: 400;
     padding-right: 40px;
-    display: flex;
+    @include flexBox(null);
 
     span {
       color: rgb(230, 228, 228);

@@ -1,7 +1,16 @@
 import React, { useState } from 'react'
-import { Table } from 'antd'
+import { Button, Table, Tag } from 'antd'
+import styles from '@/styles/table.module.scss'
+import viewBtn from '@/shared/media/imgs/view.svg'
+import editBtn from '@/shared/media/imgs/edit.svg'
+import deleteBtn from '@/shared/media/imgs/delete.svg'
+import keyBtn from '@/shared/media/imgs/key.svg'
+import { EmployeesDataSource } from '../../shared/custom/utils'
+import EmployeeModal from '@/pages/Employee/EmployeeModal'
 
 const Employee = () => {
+  const [isOpen, setOpen] = useState(false)
+  const [actionType, setActionType] = useState('view')
   const [tableParams, setTableParams] = useState({
     pagination: {
       current: 1,
@@ -9,57 +18,90 @@ const Employee = () => {
     },
   })
 
-  const columns = [
+  const EmployeesColumns = [
     {
       title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      filters: [
-        {
-          text: 'John Doe',
-          value: 'John Doe',
-        },
-        {
-          text: 'Jane Smith',
-          value: 'Jane Smith',
-        },
-        {
-          text: 'Jane Smith2',
-          value: 'Jane Smith2',
-        },
-      ],
-      onFilter: (value, record) => record.name.indexOf(value) === 0,
+      dataIndex: 'firstname',
+      key: 'firstname',
     },
     {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
+      title: 'Surname',
+      dataIndex: 'lastname',
+      key: 'lastname',
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-    },
-  ]
-
-  const dataSource = [
-    {
-      key: '1',
-      name: 'John Doe',
-      age: 25,
-      address: '123 Main St',
+      title: 'Mail',
+      dataIndex: 'email',
+      key: 'email',
     },
     {
-      key: '2',
-      name: 'Jane Smith',
-      age: 30,
-      address: '456 Oak St',
+      title: 'Status',
+      key: 'status',
+      dataIndex: 'status',
+      render: (status) => {
+        let className = status === 'active' ? 'active' : 'deactive'
+        return (
+          <Tag
+            className={className === 'active' ? styles.active : styles.deactive}
+            key={status}
+          >
+            {status}
+          </Tag>
+        )
+      },
     },
     {
-      key: '3',
-      name: 'Jane Smith2',
-      age: 34,
-      address: '456 Oak St',
+      title: 'Teams',
+      dataIndex: 'teams',
+      key: 'teams',
+    },
+    {
+      title: 'Roles',
+      dataIndex: 'roles',
+      key: 'roles',
+    },
+    {
+      title: 'Actions',
+      dataIndex: 'actions',
+      key: 'actions',
+      render: (_, { actions }) => (
+        <>
+          {actions.map((action) => (
+            <Button
+              key={action}
+              className={
+                action === 'view'
+                  ? styles.view
+                  : action === 'edit'
+                  ? styles.edit
+                  : action === 'delete'
+                  ? styles.delete
+                  : styles.resetPassword
+              }
+              onClick={() => {
+                if (action === 'view') {
+                  setOpen(!isOpen)
+                  setActionType('view')
+                } else if (action === 'edit') {
+                  setOpen(!isOpen)
+                  setActionType('update')
+                } else if (action === 'delete') {
+                  setOpen(!isOpen)
+                  setActionType('delete')
+                } else {
+                  setOpen(!isOpen)
+                  setActionType('resetPassword')
+                }
+              }}
+            >
+              {action === 'view' && <img src={viewBtn} alt='view' />}
+              {action === 'edit' && <img src={editBtn} alt='edit' />}
+              {action === 'delete' && <img src={deleteBtn} alt='deleteBtn' />}
+              {action === 'resetPassword' && <img src={keyBtn} alt='key' />}
+            </Button>
+          ))}
+        </>
+      ),
     },
   ]
 
@@ -72,11 +114,20 @@ const Employee = () => {
   }
 
   return (
-    <Table
-      columns={columns}
-      title={() => 'All Users'}
-      dataSource={dataSource}
-    />
+    <>
+      <EmployeeModal
+        actionType={actionType}
+        isOpen={isOpen}
+        setOpen={setOpen}
+      />
+      <Table
+        className={styles.table}
+        columns={EmployeesColumns}
+        title={() => 'All Employees'}
+        dataSource={EmployeesDataSource}
+        onChange={handleTableChange}
+      />
+    </>
   )
 }
 

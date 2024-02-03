@@ -6,11 +6,13 @@ import users from '@/shared/media/imgs/users.svg'
 import project from '@/shared/media/imgs/project.svg'
 import reports from '@/shared/media/imgs/reports.svg'
 import { Card, Col, Row } from 'antd'
+import { Typography } from 'antd'
+const { Title, Text, Paragraph } = Typography
 
 const Home = () => {
   return (
     <div className={styles.Home}>
-      <Row gutter={16}>
+      <Row>
         <Col xs={24} sm={24} md={24} lg={16} xl={16}>
           <Card
             style={{
@@ -25,16 +27,16 @@ const Home = () => {
 
               <div className={styles.card_title}>
                 <p>Welcome</p>
-                <h3>Mehdiyeva Shumen</h3>
+                <Title level={3}>Mehdiyeva Shumen</Title>
               </div>
             </div>
 
             <div className={styles.card_body}>
-              <span>
+              <Text>
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit.
                 Accusantium facilis, voluptatem maiores esse molestiae
                 laboriosam incidunt itaque consequatur. Assumenda, tempora!
-              </span>
+              </Text>
             </div>
           </Card>
         </Col>
@@ -47,15 +49,15 @@ const Home = () => {
 
               <div className={styles.card_title}>
                 <p>Weather</p>
-                <h3> 6 &#8451;</h3>
+                <Title level={3}> 6 &#8451;</Title>
               </div>
             </div>
 
             <div className={styles.card_body}>
-              <span>
+              <Text>
                 A bit of sleet late this evening; windy with considerable
                 cloudiness
-              </span>
+              </Text>
             </div>
           </Card>
         </Col>
@@ -68,7 +70,7 @@ const Home = () => {
 
               <div className={styles.card_title}>
                 <p>Teams</p>
-                <h3>5 Teams</h3>
+                <Title level={3}>5 Teams</Title>
               </div>
             </div>
 
@@ -84,7 +86,7 @@ const Home = () => {
 
               <div className={styles.card_title}>
                 <p>Users</p>
-                <h3>20 Users</h3>
+                <Title level={3}>20 Users</Title>
               </div>
             </div>
 
@@ -100,7 +102,7 @@ const Home = () => {
 
               <div className={styles.card_title}>
                 <p>Projects</p>
-                <h3>6 Projects</h3>
+                <Title level={3}>6 Projects</Title>
               </div>
             </div>
 
@@ -116,7 +118,7 @@ const Home = () => {
 
               <div className={styles.card_title}>
                 <p>Reports</p>
-                <h3>30 Reports</h3>
+                <Title level={3}>30 Reports</Title>
               </div>
             </div>
 

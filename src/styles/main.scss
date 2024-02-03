@@ -1,49 +1,66 @@
 @import './variables';
+@import './mixins';
 @import './table';
+// @import './media';
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Lexend', sans-serif;
+  // font-weight: 300;
 }
 
 body {
-  background: var(--Neutral-Colors-800, $primary);
-  font-family: 'Mona-Sans', sans-serif;
+  background: $primary-dark;
+  // font-family: 'Lexend';
+}
+
+@font-face {
+  font-weight: 400;
+  font-family: 'Lexend';
+  src: local('Lexend-Regular'),
+    url('../shared/media/fonts/Lexend-Regular.ttf') format('truetype');
+}
+
+@font-face {
   font-weight: 500;
+  font-family: 'Lexend';
+  src: local('LexendMedium'),
+    url('../shared/media/fonts/Lexend-Medium.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: 'Mona-Sans';
-  src: url('../shared/media/fonts/Mona-Sans-Regular.ttf');
-}
-
-@font-face {
-  font-family: 'Mona-Sans';
-  src: url('../shared/media/fonts/Mona-Sans-Medium.ttf');
-  font-weight: 500;
-}
-
-@font-face {
-  font-family: 'Mona-Sans';
-  src: url('../shared/media/fonts/Mona-Sans-SemiBold.ttf');
   font-weight: 600;
+  font-family: 'Lexend';
+  src: local('LexendSemiBold'),
+    url('../shared/media/fonts/Lexend-SemiBold.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: 'Mona-Sans';
-  src: url('../shared/media/fonts/Mona-Sans-Bold.ttf');
-  font-weight: bold;
+  font-weight: 700;
+  font-family: 'Lexend';
+  src: local('LexendBold'),
+    url('../shared/media/fonts/Lexend-Bold.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: 'Mona-Sans';
-  src: url('../shared/media/fonts/Mona-Sans-ExtraBold.ttf');
   font-weight: 800;
+  font-family: 'Lexend';
+  src: local('LexendExtraBold'),
+    url('../shared/media/fonts/Lexend-ExtraBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-weight: 300;
+  font-family: 'Lexend';
+  src: local('LexendLight'),
+    url('../shared/media/fonts/Lexend-Light.ttf') format('truetype');
 }
 
 .ant-layout,
 .ant-layout-sider {
-  background: $primary;
+  background: $primary-dark;
 }
 .ant-layout-sider {
   height: 100vh;
@@ -51,7 +68,7 @@ body {
 }
 
 .ant-layout-sider-children {
-  background-color: $primary !important;
+  background-color: $primary-dark !important;
 }
 
 .ant-layout-sider-collapsed {
@@ -68,13 +85,13 @@ body {
 }
 
 .ant-menu.ant-menu-inline-collapsed {
-  background-color: $primary;
+  background-color: $primary-dark;
   color: $white;
 }
 
 .ant-menu.ant-menu-item-active {
   color: $light;
-  background-color: $secondary !important;
+  background-color: $secondary-dark !important;
 }
 
 .ant-menu-title-content a {
@@ -82,17 +99,17 @@ body {
 }
 
 .ant-menu-title-content-active {
-  background-color: $secondary2;
+  background-color: $secondary2-dark;
 }
 
 .ant-menu-light.ant-menu-root.ant-menu-inline {
-  background-color: $primary;
+  background-color: $primary-dark;
   color: $light;
 }
 
 .ant-menu-light .ant-menu-item-selected {
-  background-color: $secondary;
-  border-left: 5px solid $secondary2;
+  background-color: $secondary-dark;
+  border-left: 5px solid $secondary2-dark;
   color: $white;
 }
 
@@ -104,11 +121,11 @@ body {
 }
 
 .ant-btn.ant-btn-icon-only {
-  background-color: $primary;
+  background-color: $primary-dark;
   color: $light !important;
 }
 .ant-btn.ant-btn-icon-only:hover {
-  background-color: $secondary !important;
+  background-color: $secondary-dark !important;
   color: $white !important;
 }
 
@@ -116,4 +133,22 @@ body {
   background-color: #1f1f3b;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px !important;
   margin: 10px;
+}
+
+.ant-row {
+  margin: 0 !important;
+}
+
+.ant-typography {
+  margin: 0 !important;
+}
+
+.ant-drawer-body {
+  color: $secondary-dark !important;
+}
+
+.ant-drawer-body {
+  :not(.ant-menu-item-selected):hover {
+    color: $secondary-dark;
+  }
 }

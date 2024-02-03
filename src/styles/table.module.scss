@@ -1,0 +1,53 @@
+.table {
+  margin: 20px;
+}
+.active {
+  border-radius: 2px;
+  border: 0.6px solid rgba(5, 193, 104, 0.5);
+  background: var(--Other-Green-50, rgba(5, 193, 104, 0.2));
+  color: var(--System-Colors-Green-300, #14ca74);
+  font-size: 13px;
+  padding: 5px 10px;
+  font-weight: 500;
+  line-height: 14px;
+}
+.deactive {
+  border-radius: 2px;
+  border: 0.6px solid var(--Other-Gray-50, rgba(174, 185, 225, 0.2));
+  background: rgba(241, 241, 243, 0.2);
+  color: var(--Neutral-Colors-400, #aeb9e1);
+  font-size: 13px;
+  padding: 5px 10px;
+  font-weight: 500;
+  line-height: 14px;
+}
+
+.view,
+.delete,
+.edit,
+.resetPassword {
+  padding: 5px 10px;
+  margin: 5px 10px;
+  border: none;
+  img {
+    width: 15px;
+    height: 15px;
+    margin-bottom: 5px;
+  }
+}
+
+.view {
+  background-color: rgba(0, 194, 255, 0.2);
+}
+
+.edit {
+  background-color: rgba(253, 181, 42, 0.2);
+}
+
+.delete {
+  background-color: rgba(255, 90, 101, 0.2);
+}
+
+.resetPassword {
+  background-color: rgba(20, 202, 116, 0.2);
+}

@@ -9,7 +9,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <Suspense
       fallback={
-        <div className='spinner-border text-primary' role='status'>
+        <div className='spinner-border text-primary-dark' role='status'>
           <span className='visually-hidden'>Loading...</span>
         </div>
       }
