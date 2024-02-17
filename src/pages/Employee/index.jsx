@@ -5,18 +5,25 @@ import viewBtn from '@/shared/media/imgs/view.svg'
 import editBtn from '@/shared/media/imgs/edit.svg'
 import deleteBtn from '@/shared/media/imgs/delete.svg'
 import keyBtn from '@/shared/media/imgs/key.svg'
-import { EmployeesDataSource } from '../../shared/custom/utils'
-import EmployeeModal from '@/pages/Employee/EmployeeModal'
+import { EmployeesDataSource } from '@/shared/custom/utils'
+import Modals from '@/pages/Employee/Modals'
+import Create from './Modals/Create'
+import Filter from './Modals/Filter'
+import { useGetUsersQuery } from '@/redux/api/user'
 
 const Employee = () => {
   const [isOpen, setOpen] = useState(false)
   const [actionType, setActionType] = useState('view')
+  const [modal1Open, setModal1Open] = useState(false)
+  const [modal2Open, setModal2Open] = useState(false)
   const [tableParams, setTableParams] = useState({
     pagination: {
       current: 1,
       pageSize: 10,
     },
   })
+  const { data } = useGetUsersQuery()
+  console.log(data, 'EMployedeyem')
 
   const EmployeesColumns = [
     {
@@ -79,18 +86,23 @@ const Employee = () => {
                   : styles.resetPassword
               }
               onClick={() => {
-                if (action === 'view') {
-                  setOpen(!isOpen)
-                  setActionType('view')
-                } else if (action === 'edit') {
-                  setOpen(!isOpen)
-                  setActionType('update')
-                } else if (action === 'delete') {
-                  setOpen(!isOpen)
-                  setActionType('delete')
-                } else {
-                  setOpen(!isOpen)
-                  setActionType('resetPassword')
+                switch (action) {
+                  case 'view':
+                    setOpen(!isOpen)
+                    setActionType('view')
+                    break
+                  case 'edit':
+                    setOpen(!isOpen)
+                    setActionType('update')
+                    break
+                  case 'delete':
+                    setOpen(!isOpen)
+                    setActionType('delete')
+                    break
+                  case 'resetPassword':
+                    setOpen(!isOpen)
+                    setActionType('resetPassword')
+                    break
                 }
               }}
             >
@@ -115,15 +127,22 @@ const Employee = () => {
 
   return (
     <>
-      <EmployeeModal
-        actionType={actionType}
-        isOpen={isOpen}
-        setOpen={setOpen}
-      />
+      <Modals actionType={actionType} isOpen={isOpen} setOpen={setOpen} />
       <Table
         className={styles.table}
         columns={EmployeesColumns}
-        title={() => 'All Employees'}
+        title={() => {
+          return (
+            <div className={styles.table_header}>
+              <p className='title'>All Employees</p>
+              <div className='buttons'>
+                <Filter modal1Open={modal1Open} setModal1Open={setModal1Open} />
+                <br />
+                <Create modal2Open={modal2Open} setModal2Open={setModal2Open} />
+              </div>
+            </div>
+          )
+        }}
         dataSource={EmployeesDataSource}
         onChange={handleTableChange}
       />

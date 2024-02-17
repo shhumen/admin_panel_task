@@ -1,12 +1,87 @@
+@import '@/styles/variables';
+@import '@/styles/mixins';
+
 .Login {
   width: 100%;
-  height: 60vh;
-  //   margin: 10% auto;
-  text-align: center;
+
+  h3 {
+    font-size: 45px;
+    padding: 20px 0;
+    color: var(--light-color) !important;
+  }
+  span {
+    color: red !important;
+  }
+  label {
+    color: #fff !important;
+  }
 }
 
 .Layout {
   width: 100%;
   height: 100vh;
-  background-color: rgb(133, 86, 86);
+  background-color: var(--primary-color);
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.Form {
+  // margin: 10% auto;
+  height: 100vh;
+  padding: 0 40px;
+  @include flexBox(center, column);
+  button {
+    background-color: transparent;
+    color: var(--light-color);
+    padding: 10px 50px;
+    height: auto !important;
+    border: 1px solid var(--secondary-color-two);
+    background-color: var(--primary-color);
+    border-radius: 7px;
+    transition: 0.5s ease-in-out;
+    &:hover {
+      background-color: var(--secondary-color-two);
+      color: var(--secondary-color);
+    }
+  }
+}
+
+.FormLink {
+  text-align: center;
+  justify-content: center;
+  a {
+    color: var(--light-color);
+  }
+}
+
+.ErrorMessage {
+  font-weight: 400;
+  color: red;
+}
+
+.FormItem {
+  @include flexBox(null, column);
+  align-items: flex-start;
+  padding: 0 30px;
+  margin: 10px auto;
+  width: 100%;
+  label {
+    color: var(--light-color) !important;
+  }
+  input {
+    width: 100%;
+    padding: 10px 30px;
+    outline: none;
+    border: 7px;
+    background-color: transparent;
+    border-bottom: 1px solid var(--primary-text-color);
+    color: var(--light-color) !important;
+  }
+
+  // .ant-menu-item-selected {
+  //   color: #fff !important;
+  // }
 }

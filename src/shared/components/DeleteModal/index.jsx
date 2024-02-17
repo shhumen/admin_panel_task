@@ -10,7 +10,8 @@ const DeleteModal = ({ isOpen, setOpen }) => {
       open={isOpen}
       onOk={() => setOpen(false)}
       onCancel={() => setOpen(false)}
-      okText={'Delete'}
+      okText='Delete'
+      okButtonProps={{ className: 'delete' }}
     >
       <Space />
 

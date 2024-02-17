@@ -5,8 +5,9 @@ import { TeamsDataSource } from '@/shared/custom/utils'
 import viewBtn from '@/shared/media/imgs/view.svg'
 import editBtn from '@/shared/media/imgs/edit.svg'
 import deleteBtn from '@/shared/media/imgs/delete.svg'
-import createBtn from '@/shared/media/imgs/create.svg'
-import TeamsModal from './TeamsModal'
+import Modals from './Modals'
+// import createBtn from '@/shared/media/imgs/create.svg'
+// import TeamsModal from './TeamsModal'
 
 function Teams() {
   const [isOpen, setOpen] = useState(false)
@@ -32,11 +33,6 @@ function Teams() {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-    },
-    {
-      title: 'Users',
-      dataIndex: 'users',
-      key: 'users',
     },
     {
       title: 'Actions',
@@ -87,7 +83,7 @@ function Teams() {
 
   return (
     <>
-      <TeamsModal actionType={actionType} isOpen={isOpen} setOpen={setOpen} />
+      <Modals actionType={actionType} isOpen={isOpen} setOpen={setOpen} />
       <Table
         className={styles.Teams}
         columns={TeamsColumns}

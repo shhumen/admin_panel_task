@@ -9,8 +9,6 @@ import {
 
 import home from '@/shared/media/imgs/Home.svg'
 
-import { Avatar, Button, Tooltip } from 'antd'
-
 function getItem(label, key, icon, children, type) {
   return {
     key,
@@ -37,100 +35,16 @@ export const TeamsDataSource = [
   {
     key: '1',
     name: 'Frontend',
-    users: (
-      <Avatar.Group>
-        <Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=1' />
-        <a href='https://ant.design'>
-          <Avatar
-            style={{
-              backgroundColor: '#f56a00',
-            }}
-          >
-            K
-          </Avatar>
-        </a>
-        <Tooltip title='Ant User' placement='top'>
-          <Avatar
-            style={{
-              backgroundColor: '#87d068',
-            }}
-            icon={<UserOutlined />}
-          />
-        </Tooltip>
-        <Avatar
-          style={{
-            backgroundColor: '#1677ff',
-          }}
-          icon={<AntDesignOutlined />}
-        />
-      </Avatar.Group>
-    ),
     actions: ['view', 'edit', 'delete'],
   },
   {
     key: '2',
     name: 'Backend',
-    users: (
-      <Avatar.Group>
-        <Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=1' />
-        <a href='https://ant.design'>
-          <Avatar
-            style={{
-              backgroundColor: '#f56a00',
-            }}
-          >
-            K
-          </Avatar>
-        </a>
-        <Tooltip title='Ant User' placement='top'>
-          <Avatar
-            style={{
-              backgroundColor: '#87d068',
-            }}
-            icon={<UserOutlined />}
-          />
-        </Tooltip>
-        <Avatar
-          style={{
-            backgroundColor: '#1677ff',
-          }}
-          icon={<AntDesignOutlined />}
-        />
-      </Avatar.Group>
-    ),
     actions: ['view', 'edit', 'delete'],
   },
   {
     key: '3',
     name: 'Mobile',
-    users: (
-      <Avatar.Group>
-        <Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=1' />
-        <a href='https://ant.design'>
-          <Avatar
-            style={{
-              backgroundColor: '#f56a00',
-            }}
-          >
-            K
-          </Avatar>
-        </a>
-        <Tooltip title='Ant User' placement='top'>
-          <Avatar
-            style={{
-              backgroundColor: '#87d068',
-            }}
-            icon={<UserOutlined />}
-          />
-        </Tooltip>
-        <Avatar
-          style={{
-            backgroundColor: '#1677ff',
-          }}
-          icon={<AntDesignOutlined />}
-        />
-      </Avatar.Group>
-    ),
     actions: ['view', 'edit', 'delete'],
   },
 ]
@@ -475,4 +389,27 @@ export const ProjectUsersDataSource = [
   { title: 'Xander' },
   { title: 'Anakin ' },
   { title: 'Johnny ' },
+]
+
+export const ReportsDataSource = [
+  {
+    employee: 'Xenver',
+    projectName: 'Plast',
+    createdDate: '03/02/2024',
+  },
+  {
+    employee: 'John',
+    projectName: 'Furniro',
+    createdDate: '25/12/2023',
+  },
+  {
+    employee: 'Anakin',
+    projectName: 'Dashboard Dark X',
+    createdDate: '22/10/2023',
+  },
+  {
+    employee: 'Austin',
+    projectName: 'Techmart',
+    createdDate: '05/09/2023',
+  },
 ]

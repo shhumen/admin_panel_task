@@ -1,5 +1,5 @@
 .table {
-  margin: 20px;
+  margin: 0 20px;
 }
 .active {
   border-radius: 2px;
@@ -14,8 +14,8 @@
 .deactive {
   border-radius: 2px;
   border: 0.6px solid var(--Other-Gray-50, rgba(174, 185, 225, 0.2));
-  background: rgba(241, 241, 243, 0.2);
-  color: var(--Neutral-Colors-400, #aeb9e1);
+  background: rgba(255, 0, 0, 0.2);
+  color: red;
   font-size: 13px;
   padding: 5px 10px;
   font-weight: 500;
@@ -50,4 +50,15 @@
 
 .resetPassword {
   background-color: rgba(20, 202, 116, 0.2);
+}
+
+.table_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  p {
+    margin: 0;
+    font-weight: 600;
+    color: var(--secondary-color-two) !important;
+  }
 }

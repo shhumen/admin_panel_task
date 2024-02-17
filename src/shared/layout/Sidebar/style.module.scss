@@ -2,15 +2,33 @@
 
 .sidebar_logo_wrapper {
   padding: 20px;
-  color: #fff;
+  color: var(--logo-color);
   @include flexBox(center);
   font-size: 20px;
   font-style: normal;
   font-weight: 600;
   line-height: 22px;
+  img {
+    width: 30px;
+  }
   p {
     margin-left: 10px;
     margin-bottom: 0;
     font-family: 'Lexend';
+  }
+}
+
+.sidebar {
+  display: flex;
+  justify-content: space-around;
+}
+
+.logout {
+  padding: 20px;
+  background-color: transparent;
+  border: none;
+  img {
+    width: 30px;
+    height: 30px;
   }
 }

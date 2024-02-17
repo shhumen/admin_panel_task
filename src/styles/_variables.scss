@@ -1,8 +1,8 @@
 // DARK
 
-$primary-dark: #081028;
+$primary-color: #081028;
 $secondary-dark: #0a1330;
-$secondary2-dark: #cb3cff;
+$secondary-color-two: #cb3cff;
 $light: #aeb9e1;
 $white: #fff;
 
@@ -12,8 +12,38 @@ $secondary4: #343b4f;
 
 $neutral1: #0a1330;
 
-// Light
+// // Light
 
 $primary-light: #4318ff;
 $secondary-light: #f4f7fe;
 $white-light: #a3aed0;
+
+:root {
+  --primary-color: #fcfcfc;
+  --secondary-color: rgb(255, 255, 255);
+  --secondary-color-two: #6742c1;
+  --secondary-color-three: #0b1739;
+  --card-color: #fff;
+  --header-bg-color: #fcfcfc;
+  --card-text-color: #000;
+  --primary-text-color: #081028;
+  --light-color: #000;
+  --table-bg-color: #f4f4f5;
+  --logo-color: #000;
+  --box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  --table-border-color: #343b4f;
+}
+
+[theme='DARK'] {
+  --primary-color: #081028;
+  --secondary-color: #0b1739;
+  --secondary-color-two: #cb3cff;
+  --card-color: #1f1f3b;
+  --header-bg-color: #081028;
+  --card-text-color: #000;
+  --primary-text-color: #aeb9e1;
+  --light-color: #fff;
+  --table-bg-color: #0a1330;
+  --logo-color: #fff;
+  --box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}

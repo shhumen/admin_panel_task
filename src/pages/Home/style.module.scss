@@ -1,7 +1,7 @@
 @import '@/styles/variables';
 @import '@/styles/mixins';
 .Home {
-  color: $light;
+  color: var(--primary-text-color);
   margin: 20px 35px;
 
   h3 {
@@ -16,11 +16,11 @@
 
       h3 {
         font-size: 20px;
-        color: $light;
+        color: var(--primary-text-color);
       }
 
       p {
-        color: $light;
+        color: var(--primary-text-color);
         font-weight: 400;
         margin-bottom: 5px;
       }
@@ -35,7 +35,7 @@
       width: 50px;
       height: 50px;
       border-radius: 50%;
-      background-color: $secondary2-dark;
+      background-color: var(--secondary-color-two);
       img {
         width: 30px;
         height: 30px;
@@ -68,7 +68,7 @@
     @include flexBox(null);
 
     span {
-      color: rgb(230, 228, 228);
+      color: var(--primary-text-color);
       font-weight: 400;
       font-size: 15px;
     }
