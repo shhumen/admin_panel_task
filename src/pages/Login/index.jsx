@@ -5,9 +5,10 @@ import { useLoginMutation } from '../../redux/api/auth'
 import loginImg from '@/shared/media/imgs/Login-rafiki.png'
 import styles from './style.module.scss'
 import { useSelector } from 'react-redux'
+import ThemeSwitch from '../../shared/components/themeSwitcher'
 const { Title } = Typography
 
-const Login = () => {
+const Login = ({ themes, setThemes }) => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
   const [login, { isLoading, isError }] = useLoginMutation()
 
@@ -26,6 +27,7 @@ const Login = () => {
       <Row>
         <Col xs={24} sm={12} md={12} lg={12} xl={12}>
           <form className={styles.Form} onSubmit={handleSubmit(onSubmit)}>
+            <ThemeSwitch themes={themes} setThemes={setThemes} />
             <h3>Sign in</h3>
             <div className={styles.FormItem}>
               <label>Email</label>
@@ -73,7 +75,6 @@ const Login = () => {
             </button>
           </form>
         </Col>
-
         <Col xs={24} sm={12} md={12} lg={12} xl={12}>
           <div className={styles.Layout}>
             <img src={loginImg} alt='Login' />

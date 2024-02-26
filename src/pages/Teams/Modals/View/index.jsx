@@ -1,29 +1,59 @@
-import { Divider, Drawer, List } from 'antd'
+import { Avatar, Divider, Drawer, List, Spin, Tooltip } from 'antd'
 import Title from 'antd/es/skeleton/Title'
 import React from 'react'
+import { useGetTeamsByIdQuery } from '@/redux/api/teams'
+import Paragraph from 'antd/es/skeleton/Paragraph'
 
-export const View = ({ isOpen, setOpen }) => {
+export const View = ({ isOpen, setOpen, actionType }) => {
+  const teamId = actionType.teamId
+  const { data: teamDetails, isLoading, isError } = useGetTeamsByIdQuery(teamId)
+  console.log(actionType)
+  console.log(teamId)
+  console.log(teamDetails)
   return (
-    <Drawer
-      onOk={() => setOpen(false)}
-      onClose={() => setOpen(false)}
-      open={isOpen}
-      centered
-    >
+    <Drawer onClose={() => setOpen(false)} open={isOpen} centered>
       <>
-        <Title level={4}>Frontend</Title>
-        <Divider orientation='left'>Teams</Divider>
-        <List
-          itemLayout='horizontal'
-          renderItem={(item, index) => (
-            <List.Item>
-              <List.Item.Meta
-                title={item.title}
-                description='Lorem ipsum dolor sit amet.'
-              />
-            </List.Item>
-          )}
-        />
+        {teamId === undefined ? <p>Undefined Team Id</p> : ''}
+        {isLoading ? (
+          <div style={{ textAlign: 'center', padding: '24px' }}>
+            <Spin size='large' />
+            <Paragraph>Loading team details...</Paragraph>
+          </div>
+        ) : isError ? (
+          <div style={{ textAlign: 'center', padding: '24px' }}>
+            <Title level={4}>Error</Title>
+            <Paragraph>Failed to load Team details.</Paragraph>
+          </div>
+        ) : (
+          <>
+            <h4>Team Information</h4>
+            <Divider />
+            <p>Team name: {teamDetails?.name}</p>
+            <Divider />
+
+            {teamDetails?.members?.length > 0 ? (
+              <>
+                <p>Members: </p>
+                {teamDetails.members.map((member, index) => (
+                  <Avatar.Group>
+                    <Tooltip title={member.name} key={member.name}>
+                      <Avatar
+                        style={{
+                          marginRight: 8,
+                          backgroundColor: 'var(--secondary-color-two)',
+                        }}
+                      >
+                        {member.name[0]}
+                      </Avatar>
+                    </Tooltip>
+                  </Avatar.Group>
+                ))}
+              </>
+            ) : (
+              <p>There are no members yet</p>
+            )}
+          </>
+        )}
       </>
     </Drawer>
   )

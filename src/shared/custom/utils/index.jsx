@@ -20,15 +20,31 @@ function getItem(label, key, icon, children, type) {
 }
 
 export const Items = [
-  getItem(
-    <Link to='/'>Dashboard</Link>,
-    '1',
-    <img src={home} alt='Dashboard' />
-  ),
-  getItem(<NavLink to='/users'>Employees</NavLink>, '2', <UserOutlined />),
-  getItem(<NavLink to='/teams'>Teams</NavLink>, '3', <TeamOutlined />),
-  getItem(<NavLink to='/projects'>Projects</NavLink>, '4', <ProjectOutlined />),
-  getItem(<NavLink to='/reports'>Reports</NavLink>, '5', <FileOutlined />),
+  {
+    label: <Link to='/'>Dashboard</Link>,
+    key: '/',
+    icon: <img src={home} alt='Dashboard' />,
+  },
+  {
+    label: <Link to='/users'>Employees</Link>,
+    key: '/users',
+    icon: <UserOutlined />,
+  },
+  {
+    label: <Link to='/teams'>Teams</Link>,
+    key: '/teams',
+    icon: <TeamOutlined />,
+  },
+  {
+    label: <Link to='/projects'>Projects</Link>,
+    key: '/projects',
+    icon: <ProjectOutlined />,
+  },
+  {
+    label: <Link to='/reports'>Reports</Link>,
+    key: '/reports',
+    icon: <FileOutlined />,
+  },
 ]
 
 export const TeamsDataSource = [
@@ -396,20 +412,24 @@ export const ReportsDataSource = [
     employee: 'Xenver',
     projectName: 'Plast',
     createdDate: '03/02/2024',
+    actions: ['view', 'edit'],
   },
   {
     employee: 'John',
     projectName: 'Furniro',
     createdDate: '25/12/2023',
+    actions: ['view', 'edit'],
   },
   {
     employee: 'Anakin',
     projectName: 'Dashboard Dark X',
     createdDate: '22/10/2023',
+    actions: ['view', 'edit'],
   },
   {
     employee: 'Austin',
     projectName: 'Techmart',
     createdDate: '05/09/2023',
+    actions: ['view', 'edit'],
   },
 ]

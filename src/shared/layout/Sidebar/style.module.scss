@@ -9,7 +9,7 @@
   font-weight: 600;
   line-height: 22px;
   img {
-    width: 30px;
+    width: 50px;
   }
   p {
     margin-left: 10px;
@@ -21,14 +21,4 @@
 .sidebar {
   display: flex;
   justify-content: space-around;
-}
-
-.logout {
-  padding: 20px;
-  background-color: transparent;
-  border: none;
-  img {
-    width: 30px;
-    height: 30px;
-  }
 }

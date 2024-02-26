@@ -1,11 +1,14 @@
-// import { z, object, string } from 'zod'
+import { z, object, string } from 'zod'
 
-// export const EmployeeFormSchema = object({
-//   firstname: string().refine((value) => value.length > 0, {
-//     message: 'Please input your firstname!',
-//   }),
-//   password: string().min(5, { message: 'Must be 5 or more characters long' }),
-// }).required()
+export const resetPasswordSchema = z
+  .object({
+    newPassword: string(),
+    confirmPassword: string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  })
 
 export const validateMessages = {
   required: '${label} is required!',
@@ -17,3 +20,22 @@ export const validateMessages = {
     range: '${label} must be between ${min} and ${max}',
   },
 }
+
+export const createEmployeeSchema = z.object({
+  firstname: z.string(),
+  lastname: z.string(),
+  email: z.string().email(),
+  password: z.string().min(8),
+  role: z.number(),
+  team_id: z.number(),
+})
+export const createTeamSchema = z.object({
+  team_name: z.string(),
+})
+
+export const createProjectSchema = z.object({
+  name: z.string().min(1, 'Project name is required'),
+  employeeIds: z
+    .array(z.number())
+    .min(1, 'At least one employee must be selected'),
+})

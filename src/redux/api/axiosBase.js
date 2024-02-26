@@ -1,7 +1,10 @@
 import axios from 'axios'
+import { ErrorCode } from '@/shared/constants/errorCodes'
+import { logout } from '../features/auth/authSlice'
+import { v4 as uuid } from 'uuid'
 
+import { toast } from 'sonner'
 const baseURL = `${import.meta.env.VITE_BASE_URL}`
-
 export const axiosBaseQuery =
   ({ baseURL = '', headers }) =>
   async ({ url, params, method, data, responseType }, { signal, getState }) => {
@@ -25,44 +28,12 @@ export const axiosBaseQuery =
     }
   }
 
-// export const APIBaseQueryInterceptor = axiosBaseQuery({
-//   baseURL: baseURL,
-//   headers: (headers, { getState }) => {
-//     const { auth } = getState()
-//     if (auth?.access_token) {
-//       headers['Authorization'] = `${auth?.access_token}`
-//     }
-//     return headers
-//   },
-// })
-
 export const APIBaseQueryInterceptor = axiosBaseQuery({
   baseURL: baseURL,
-  headers: async (headers, { getState }) => {
+  headers: (headers, { getState }) => {
     const { auth } = getState()
     if (auth?.access_token) {
-      headers['Authorization'] = `${auth?.access_token}`
-
-      const tokenExpiration = new Date(auth?.expired_date)
-      const currentTime = new Date()
-      console.log(auth.refresh_token)
-      console.log(tokenExpiration, currentTime)
-      // if (tokenExpiration < currentTime) {
-      //   try {
-      //     const response = await axios.post(
-      //       'http://localhost:8081/v1/api/auth/refresh-token'
-      //       // {
-      //       //   refresh_token: auth?.refresh_token,
-      //       // }
-      //     )
-      //     const { access_token, tokenExpiration } = response.data
-
-      //     store.dispatch(setToken({ access_token, tokenExpiration }))
-      //     headers['Authorization'] = `${access_token}`
-      //   } catch (error) {
-      //     store.dispatch(logout())
-      //   }
-      // }
+      headers['Authorization'] = `Bearer ${auth?.access_token}`
     }
     return headers
   },
@@ -70,25 +41,40 @@ export const APIBaseQueryInterceptor = axiosBaseQuery({
 
 export const APIBaseQuery = async (args, api, extraOptions) => {
   let result = await APIBaseQueryInterceptor(args, api, extraOptions)
-
-  if (result.error) {
-    console.log('Error an occured')
+  if (result.error && result.error.status === ErrorCode.UNAUTHORIZED) {
+    const state = api
+    const userState = state.getState()
+    const { auth } = userState
+    const { user_id, access_token, refresh_token, expired_date } = auth
+    const refreshResult = await APIBaseQueryInterceptor(
+      {
+        url: 'http://localhost:8081/v1/api/auth/refresh-token',
+        data: refresh_token,
+        method: 'POST',
+      },
+      api,
+      extraOptions
+    )
+    if (refreshResult?.data) {
+      const data = refreshResult?.data
+      const { access_token, refresh_token, expired_date } = data
+      await state.dispatch(
+        setToken({ access_token, refresh_token, expired_date })
+      )
+      result = await APIBaseQueryInterceptor(args, api, extraOptions)
+    } else {
+      state.dispatch(logout())
+    }
+  } else if (result.error && result.error.status === ErrorCode.FORBIDDEN) {
+    toast.error('403 FORBIDDEN')
+    api.dispatch(logout())
+  } else if (result.error) {
+    toast.error(
+      result.error?.data?.message ||
+        result.error?.data?.error ||
+        'Xəta baş verdi'
+    )
   }
 
   return result
 }
-
-// console.log(currentTime, tokenExpiration)
-// if (tokenExpiration < currentTime) {
-//   try {
-//     const response = await axios.post('refresh-token-endpoint', {
-//       refresh_token: auth.refresh_token,
-//     })
-//     const { access_token, tokenExpiration } = response.data
-
-//     store.dispatch(setToken({ access_token, tokenExpiration }))
-//     headers['Authorization'] = `${access_token}`
-//   } catch (error) {
-//     store.dispatch(logout())
-//   }
-// }

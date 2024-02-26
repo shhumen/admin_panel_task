@@ -2,6 +2,7 @@
   margin: 0 20px;
 }
 .active {
+  text-transform: lowercase;
   border-radius: 2px;
   border: 0.6px solid rgba(5, 193, 104, 0.5);
   background: var(--Other-Green-50, rgba(5, 193, 104, 0.2));
@@ -11,7 +12,9 @@
   font-weight: 500;
   line-height: 14px;
 }
+
 .deactive {
+  text-transform: lowercase;
   border-radius: 2px;
   border: 0.6px solid var(--Other-Gray-50, rgba(174, 185, 225, 0.2));
   background: rgba(255, 0, 0, 0.2);
@@ -50,6 +53,10 @@
 
 .resetPassword {
   background-color: rgba(20, 202, 116, 0.2);
+}
+
+.role {
+  text-transform: lowercase;
 }
 
 .table_header {

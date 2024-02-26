@@ -1,23 +1,61 @@
 import React from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import {
+  AntDesignOutlined,
+  FileOutlined,
+  ProjectOutlined,
+  TeamOutlined,
+  UserOutlined,
+} from '@ant-design/icons'
 import { Layout, Menu } from 'antd'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { Items } from '@/shared/custom/utils'
-import Logo from '@/shared/media/imgs/crocusoft_logo.png'
-import Logout from '@/shared/media/imgs/logout.svg'
-import styles from './style.module.scss'
-import { useDispatch } from 'react-redux'
-import { logout } from '@/redux/features/auth/authSlice'
 const { Sider } = Layout
+import home from '@/shared/media/imgs/Home.svg'
 
-const Sidebar = ({ collapsed }) => {
+import Logo from '@/shared/media/imgs/crocusoft_logo.png'
+import { Items } from '../../custom/utils'
+
+import styles from './style.module.scss'
+
+const Sidebar = ({ collapsed, user }) => {
   const location = useLocation()
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const role = user?.role?.roleEnum
 
-  const handleLogout = () => {
-    dispatch(logout())
-    navigate('/')
-  }
+  const Items =
+    role === 'EMPLOYEE'
+      ? [
+          {
+            label: <Link to='/'>Reports</Link>,
+            key: '/reports',
+            icon: <FileOutlined />,
+          },
+        ]
+      : [
+          {
+            label: <Link to='/'>Dashboard</Link>,
+            key: '/',
+            icon: <img src={home} alt='Dashboard' />,
+          },
+          {
+            label: <Link to='/users'>Employees</Link>,
+            key: '/users',
+            icon: <UserOutlined />,
+          },
+          {
+            label: <Link to='/teams'>Teams</Link>,
+            key: '/teams',
+            icon: <TeamOutlined />,
+          },
+          {
+            label: <Link to='/projects'>Projects</Link>,
+            key: '/projects',
+            icon: <ProjectOutlined />,
+          },
+          {
+            label: <Link to='/reports'>Reports</Link>,
+            key: '/reports',
+            icon: <FileOutlined />,
+          },
+        ]
 
   return (
     <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -28,10 +66,12 @@ const Sidebar = ({ collapsed }) => {
         <img src={Logo} alt='logo' />
         <p> Crocusoft</p>
       </div>
-      <Menu mode='inline' items={Items} selectedKeys={[location.pathname]} />
-      <button className={styles.logout} onClick={handleLogout}>
-        <img src={Logout} alt='logout' />
-      </button>
+      <Menu
+        mode='inline'
+        defaultSelectedKeys={[location.pathname]}
+        selectedKeys={[location.pathname]}
+        items={Items}
+      />
     </Sider>
   )
 }

@@ -1,7 +1,6 @@
 @import './variables';
 @import './mixins';
 @import './table';
-// @import './media';
 
 * {
   margin: 0;
@@ -13,49 +12,48 @@
 
 body {
   background: var(--primary-color) !important;
-  // font-family: 'Lexend';
 }
 
 @font-face {
   font-weight: 400;
   font-family: 'Lexend';
   src: local('Lexend-Regular'),
-    url('../shared/media/fonts/Lexend-Regular.ttf') format('truetype');
+    url('../shared/media/fonts/Lexend-Regular.woff2') format('woff2');
 }
 
 @font-face {
   font-weight: 500;
   font-family: 'Lexend';
   src: local('LexendMedium'),
-    url('../shared/media/fonts/Lexend-Medium.ttf') format('truetype');
+    url('../shared/media/fonts/Lexend-Medium.woff2') format('woff2');
 }
 
 @font-face {
   font-weight: 600;
   font-family: 'Lexend';
   src: local('LexendSemiBold'),
-    url('../shared/media/fonts/Lexend-SemiBold.ttf') format('truetype');
+    url('../shared/media/fonts/Lexend-SemiBold.woff2') format('woff2');
 }
 
 @font-face {
   font-weight: 700;
   font-family: 'Lexend';
   src: local('LexendBold'),
-    url('../shared/media/fonts/Lexend-Bold.ttf') format('truetype');
+    url('../shared/media/fonts/Lexend-Bold.woff2') format('woff2');
 }
 
 @font-face {
   font-weight: 800;
   font-family: 'Lexend';
   src: local('LexendExtraBold'),
-    url('../shared/media/fonts/Lexend-ExtraBold.ttf') format('truetype');
+    url('../shared/media/fonts/Lexend-ExtraBold.woff2') format('woff2');
 }
 
 @font-face {
   font-weight: 300;
   font-family: 'Lexend';
   src: local('LexendLight'),
-    url('../shared/media/fonts/Lexend-Light.ttf') format('truetype');
+    url('../shared/media/fonts/Lexend-Light.woff2') format('woff2');
 }
 
 .ant-layout,
@@ -137,9 +135,6 @@ body {
 :not(.ant-menu-item-selected):hover svg {
   color: var(--primary-text-color);
 }
-:not(.ant-menu-item-selected):hover {
-  color: var(--light-color);
-}
 
 .ant-btn.ant-btn-icon-only {
   background-color: var(--primary-color);
@@ -154,6 +149,10 @@ body {
   background-color: var(--card-color) !important;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px !important;
   margin: 10px;
+}
+
+:where(.css-dev-only-do-not-override-1qhpsh8).ant-card .ant-card-body {
+  padding: 40px 24px;
 }
 
 .ant-row {
@@ -175,10 +174,6 @@ button {
   :not(.ant-menu-item-selected) {
     color: var(--primary-text-color);
   }
-}
-
-.ant-form-item-has-error {
-  // margin-bottom: 90px !important;
 }
 
 .ant-drawer-body,
@@ -207,7 +202,6 @@ button {
 }
 
 .change-password {
-  // background-color: $secondary1;
   background: var(--primary-color);
   &:hover {
     background-color: var(--primary-text-color) !important;
@@ -226,11 +220,10 @@ button {
 
 .buttons {
   @include flexBox(flex-end);
+  margin: 30px 50px 10px 0px;
   button {
     border: 1px solid var(--secondary-color);
     margin: 0 5px;
-    // width:
-    // height:;
     border-radius: 7px;
     background-color: var(--secondary-color);
   }
@@ -272,7 +265,6 @@ button {
 .filter_btn {
   background-color: transparent !important;
   border: none;
-  // color: var(--primary-text-color) !important;
   img {
     width: 30px;
     height: 30px;
@@ -290,14 +282,85 @@ button {
 :where(.css-dev-only-do-not-override-1qhpsh8).ant-menu-light:not(
     .ant-menu-horizontal
   )
-  .ant-menu-item:not(.ant-menu-item-selected):hover {
-  padding-inline-end: 10px;
-  background-color: red;
+  .ant-menu-item:not(.ant-menu-item-selected):active {
+  background-color: transparent;
+}
+
+:where(.css-dev-only-do-not-override-1qhpsh8).ant-pagination
+  .ant-pagination-item:not(.ant-pagination-item-active) {
+  color: var(--primary-text-color) !important;
+}
+
+.active-menu-item {
+  background-color: var(--menu-selected-color);
+}
+
+:where(.css-dev-only-do-not-override-1qhpsh8).ant-pagination
+  .ant-pagination-item-active {
+  border-color: var(--primary-color) !important;
+}
+:where(.css-dev-only-do-not-override-1qhpsh8).ant-pagination
+  .ant-pagination-item-active:hover {
+  color: var(--card-color) !important;
+}
+
+::-webkit-scrollbar {
+  appearance: none !important;
 }
 
 :where(.css-dev-only-do-not-override-1qhpsh8).ant-menu-light:not(
     .ant-menu-horizontal
   )
-  .ant-menu-item:not(.ant-menu-item-selected):active {
+  .ant-menu-item:not(.ant-menu-item-selected):hover {
+  background-color: transparent;
+  span a {
+    color: var(--primary-text-color) !important;
+  }
+}
+
+.ant-modal-content {
+  background-color: var(--secondary-color) !important;
+  .ant-modal-header {
+    background-color: var(--secondary-color) !important;
+  }
+}
+
+.ant-modal-footer button span {
+  color: var(--light-color) !important;
+}
+
+.ant-modal-footer button:first-child span {
+  color: $neutral1 !important;
+}
+
+.ant-modal-footer button.cancel:hover {
+  color: #000;
+}
+
+.ant-modal-content :not(.ant-menu-item-selected):hover {
+  color: var(--primary-text-color) !important;
+}
+
+.input {
+  padding: 10px;
+  // background-color: rgba($color: #fff, $alpha: 0.7);
+  background-color: transparent;
+  border: 1px solid var(--menu-selected-color);
+  color: var(--primary-text-color) !important;
+
+  &:hover {
+    // background-color: rgba($color: transparent, $alpha: 0.7);
+    background-color: transparent;
+  }
+}
+
+::placeholder {
+  color: var(--primary-text-color) !important;
+}
+
+:where(.css-dev-only-do-not-override-1qhpsh8).ant-select-outlined:not(
+    .ant-select-customize-input
+  )
+  .ant-select-selector {
   background-color: transparent;
 }

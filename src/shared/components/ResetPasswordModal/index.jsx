@@ -1,77 +1,75 @@
 import React from 'react'
-import { Form, Input, Modal, Select } from 'antd'
+import { Button, Flex, Form, Input, Modal, Select } from 'antd'
+import { resetPasswordSchema } from '@/validation'
+import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useResetUserPasswordMutation } from '@/redux/api/user'
 
-const onFinish = (values) => {
-  console.log('Success:', values)
-}
-const onFinishFailed = (errorInfo) => {
-  console.log('Failed:', errorInfo)
-}
+const ResetPasswordModal = ({ isOpen, setOpen, actionType }) => {
+  const [resetUserPassword] = useResetUserPasswordMutation()
 
-const validateMessages = {
-  required: '${label} is required!',
-  types: {
-    email: '${label} is not a valid email!',
-    number: '${label} is not a valid number!',
-  },
-  number: {
-    range: '${label} must be between ${min} and ${max}',
-  },
-}
+  console.log(actionType)
 
-const ResetPasswordModal = ({ isOpen, setOpen }) => {
+  const {
+    handleSubmit,
+    formState: { errors },
+    control,
+    getValues,
+  } = useForm({ resolver: zodResolver(resetPasswordSchema) })
+
+  const onSubmit = async (formData) => {
+    console.log(formData)
+    const { newPassword } = formData
+    const { userId } = actionType
+    await resetUserPassword({ user_id: userId, newPassword })
+    setOpen(false)
+  }
+
   return (
     <Modal
-      title='ResetPassword modal'
+      title='Reset Password'
       centered
       open={isOpen}
-      onOk={() => setOpen(false)}
+      footer={null}
       onCancel={() => setOpen(false)}
     >
-      <Form
-        name='basic'
-        labelCol={{
-          span: 8,
-        }}
-        wrapperCol={{
-          span: 16,
-        }}
-        style={{
-          maxWidth: '100%',
-        }}
-        initialValues={{
-          remember: true,
-        }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        autoComplete='off'
-        validateMessages={validateMessages}
-      >
-        <Form.Item
-          label='New Password'
-          name='newPassword'
-          rules={[
-            {
-              required: true,
-              message: 'Please input your password!',
-            },
-          ]}
-        >
-          <Input.Password />
-        </Form.Item>
-        <Form.Item
-          label='Repeat Password'
-          name='repeatedPassword'
-          rules={[
-            {
-              required: true,
-              message: 'Please input your password!',
-            },
-          ]}
-        >
-          <Input.Password />
-        </Form.Item>
-      </Form>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Flex vertical>
+          <Controller
+            name='newPassword'
+            control={control}
+            render={({ field }) => (
+              <Input.Password
+                placeholder='New Password'
+                variant='filled'
+                className='input'
+                {...field}
+              />
+            )}
+          />
+          {errors.newPassword && (
+            <span className='error'>{errors.newPassword.message}</span>
+          )}
+          <br />
+          <Controller
+            name='confirmPassword'
+            control={control}
+            render={({ field }) => (
+              <Input.Password
+                placeholder='Confirm Password'
+                variant='filled'
+                className='input'
+                {...field}
+              />
+            )}
+          />
+          {errors.confirmPassword && (
+            <span className='error'>{errors.confirmPassword.message}</span>
+          )}
+        </Flex>
+        <br />
+        <Button>Submit</Button>
+      </form>
     </Modal>
   )
 }

@@ -32,9 +32,11 @@ $white-light: #a3aed0;
   --logo-color: #000;
   --box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   --table-border-color: #343b4f;
+  --menu-selected-color: #c4b3f0;
 }
 
 [theme='DARK'] {
+  --menu-selected-color: #121f49;
   --primary-color: #081028;
   --secondary-color: #0b1739;
   --secondary-color-two: #cb3cff;

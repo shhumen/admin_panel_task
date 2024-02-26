@@ -1,0 +1,10 @@
+.Switch {
+  background-color: transparent;
+  border: none !important;
+  color: var(--primary-text-color) !important;
+  margin: 0 20px;
+
+  &:hover {
+    background-color: transparent !important;
+  }
+}

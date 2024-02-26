@@ -1,33 +1,66 @@
-import { Divider, Drawer, List, Space } from 'antd'
-import Title from 'antd/es/skeleton/Title'
 import React from 'react'
-import { ProjectUsersDataSource } from '@/shared/custom/utils'
+import { Avatar, Divider, Drawer, Spin, Tooltip } from 'antd'
+import { useGetProjectByIdQuery } from '@/redux/api/projects'
+import Paragraph from 'antd/es/skeleton/Paragraph'
+import Title from 'antd/es/skeleton/Title'
 
-function View({ isOpen, setOpen }) {
+const View = ({ isOpen, setOpen, actionType }) => {
+  console.log('hello from View Page')
+  const projectId = actionType?.projectId
+  const {
+    data: projectDetails,
+    isLoading,
+    isError,
+  } = useGetProjectByIdQuery(projectId)
+
+  console.log(isOpen, 'view')
+
   return (
-    <Drawer
-      title='View'
-      onOk={() => setOpen(false)}
-      onClose={() => setOpen(false)}
-      open={isOpen}
-      centered
-    >
+    <Drawer onClose={() => setOpen(false)} open={isOpen} centered>
       <>
-        <Title level={4}>Furniro</Title>
-        <Space />
-        <Divider orientation='left'>Employees</Divider>
-        <List
-          itemLayout='horizontal'
-          dataSource={ProjectUsersDataSource}
-          renderItem={(item, index) => (
-            <List.Item>
-              <List.Item.Meta
-                title={item.title}
-                description='Lorem ipsum dolor sit amet.'
-              />
-            </List.Item>
-          )}
-        />
+        {projectId === undefined ? (
+          <p>Undefined Project Id</p>
+        ) : isLoading ? (
+          <div style={{ textAlign: 'center', padding: '24px' }}>
+            <Spin size='large' />
+            <Paragraph>Loading Project details...</Paragraph>
+          </div>
+        ) : isError ? (
+          <div style={{ textAlign: 'center', padding: '24px' }}>
+            <Title level={4}>Error</Title>
+            <Paragraph>Failed to load Project details.</Paragraph>
+          </div>
+        ) : (
+          <>
+            <h4>Project Information</h4>
+            <Divider />
+            <p>Project name: {projectDetails?.name}</p>
+            <Divider />
+            {projectDetails?.members?.length > 0 && (
+              <>
+                <p>Members: </p>
+                {projectDetails?.members.map((member, index) => (
+                  <Avatar.Group key={index}>
+                    <Tooltip
+                      title={`${member.name} ${member.surname}`}
+                      key={member.name}
+                    >
+                      <Avatar
+                        style={{
+                          marginRight: 8,
+                          backgroundColor: 'var(--secondary-color-two)',
+                        }}
+                      >
+                        {member.name[0]}
+                      </Avatar>
+                    </Tooltip>
+                  </Avatar.Group>
+                ))}
+              </>
+            )}
+          </>
+        )}
+        salam
       </>
     </Drawer>
   )

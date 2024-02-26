@@ -1,76 +1,72 @@
 import React from 'react'
-import { Form, Input, Modal, Select } from 'antd'
-import { validateMessages } from '@/validation'
+import { Button, Flex, Form, Input, Modal, Select } from 'antd'
 import create from '@/shared/media/imgs/create.svg'
+import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { createTeamSchema } from '@/validation'
+import { useCreateTeamMutation } from '@/redux/api/teams'
 
-export const Create = ({ modal2Open, setModal2Open }) => {
+export const Create = ({ modalOpen, setModalOpen }) => {
+  const [createTeam] = useCreateTeamMutation()
+
+  const {
+    handleSubmit,
+    formState: { errors },
+    control,
+    getValues,
+  } = useForm({ resolver: zodResolver(createTeamSchema) })
+
+  const onSubmit = (formData) => {
+    console.log(formData, 'formsdata')
+    createTeam(formData)
+    setModalOpen(false)
+  }
+
+  const handleCancel = () => {
+    setModalOpen(false)
+  }
+
   return (
     <>
       <button
         className='create'
         type='primary'
-        onClick={() => setModal2Open(true)}
+        onClick={() => setModalOpen(true)}
       >
         <img src={create} alt='filter' />
       </button>
       <Modal
         title='Create modal'
         centered
-        open={modal2Open}
-        onOk={() => setModal2Open(false)}
-        onCancel={() => setModal2Open(false)}
-        okButtonProps={{ className: 'filter' }}
+        open={modalOpen}
+        onCancel={handleCancel}
+        footer={null}
+        okButtonProps={{ className: 'create' }}
         okText='Create'
       >
-        <Form
-          name='basic'
-          labelCol={{
-            span: 6,
-          }}
-          wrapperCol={{
-            span: 18,
-          }}
-          initialValues={{
-            remember: true,
-          }}
-          autoComplete='off'
-          validateMessages={validateMessages}
-        >
-          <Form.Item
-            label='Team Name'
-            name='teamName'
-            rules={[
-              {
-                required: true,
-                message: 'Please input your project name!',
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label='Employees'
-            name='status'
-            rules={[{ required: true }]}
-          >
-            <Select
-              mode='multiple'
-              allowClear
-              style={{
-                width: '100%',
-              }}
-              placeholder='Please select'
-              options={[
-                { value: 'John', label: 'John' },
-                { value: 'Xender', label: 'Xender' },
-                { value: 'Denver', label: 'Denver' },
-                { value: 'Anakin', label: 'Anakin' },
-                { value: 'Alex', label: 'Alex' },
-              ]}
-            />
-          </Form.Item>
-        </Form>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Flex vertical>
+            <div>
+              <Controller
+                name='team_name'
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    placeholder='Team Name'
+                    variant='filled'
+                    className='input'
+                    {...field}
+                  />
+                )}
+              />
+              {errors.team_name && (
+                <span className='error'>{errors.team_name.message}</span>
+              )}
+            </div>
+          </Flex>
+          <br />
+          <Button htmlType='submit'>Submit</Button>
+        </form>
       </Modal>
     </>
   )

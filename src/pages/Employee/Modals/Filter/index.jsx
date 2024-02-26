@@ -12,22 +12,24 @@ const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo)
 }
 
-const Filter = ({ modal1Open, setModal1Open }) => {
+console.log('render')
+
+const Filter = ({ modalOpen, setModalOpen }) => {
   return (
     <>
       <button
         className={styles.filter_btn}
         type='primary'
-        onClick={() => setModal1Open(true)}
+        onClick={() => setModalOpen(true)}
       >
         <img src={filter} alt='filter' />
       </button>
       <Drawer
         title='Filter modal'
         centered
-        open={modal1Open}
-        onOk={() => setModal1Open(false)}
-        onClose={() => setModal1Open(false)}
+        open={modalOpen}
+        onOk={() => setModalOpen(false)}
+        onClose={() => setModalOpen(false)}
         okButtonProps={{ className: 'filter' }}
         okText='Filter'
       >

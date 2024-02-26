@@ -1,8 +1,10 @@
+import { Fragment } from 'react'
+
 const RenderIf = ({ children, conditions, renderElse = '' }) => {
   if (conditions) {
-    return children
+    return <Fragment>{children}</Fragment>
   }
-  return renderElse
+  return <Fragment>{renderElse}</Fragment>
 }
 
 export default RenderIf

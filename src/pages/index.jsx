@@ -9,9 +9,8 @@ import Header_ from '@/shared/layout/Header'
 import Auxiliary from '@/shared/modules/Auxiliary'
 import { useSelector } from 'react-redux'
 
-const fake_auth = false
-
 const Router = () => {
+  const { user } = useSelector((state) => state.auth)
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
 
   const [collapsed, setCollapsed] = useState(false)
@@ -20,21 +19,29 @@ const Router = () => {
     <Auxiliary theme={themes}>
       {isAuthenticated ? (
         <>
-          <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+          <Sidebar
+            collapsed={collapsed}
+            user={user}
+            setCollapsed={setCollapsed}
+          />
           <Layout>
             <Header_
+              user={user}
               collapsed={collapsed}
               setCollapsed={setCollapsed}
               themes={themes}
               setThemes={setThemes}
             />
-            <PrivateRoute />
+            <PrivateRoute user={user} />
           </Layout>
         </>
       ) : (
         <>
           <Routes>
-            <Route path='/' element={<Login />} />
+            <Route
+              path='/'
+              element={<Login themes={themes} setThemes={setThemes} />}
+            />
             <Route path='/otp' element={<ForgotPassword />} />
           </Routes>
         </>

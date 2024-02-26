@@ -1,6 +1,6 @@
 import React from 'react'
-import EditModal from '@/shared/components/EditModal'
-import { Form, Input, Select } from 'antd'
+// import EditModal from '@/shared/components/EditModal'
+import { Form, Input, Modal, Select } from 'antd'
 import { validateMessages } from '@/validation'
 
 const onFinish = (values) => {
@@ -12,7 +12,7 @@ const onFinishFailed = (errorInfo) => {
 
 function Edit({ isOpen, setOpen }) {
   return (
-    <EditModal isOpen={isOpen} setOpen={setOpen}>
+    <Modal isOpen={isOpen} setOpen={setOpen}>
       <Form
         name='basic'
         labelCol={{
@@ -62,7 +62,7 @@ function Edit({ isOpen, setOpen }) {
           />
         </Form.Item>
       </Form>
-    </EditModal>
+    </Modal>
   )
 }
 

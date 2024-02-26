@@ -12,10 +12,14 @@ const initialState = {
   user: {
     name: '',
     surname: '',
+    email: '',
     role: {
       id: null,
       roleEnum: '',
     },
+    team: null,
+    project: [],
+    status: '',
   },
 }
 
@@ -31,7 +35,7 @@ const authSlice = createSlice({
       state.isAuthenticated = true
     },
     setUserData: (state, action) => {
-      state.user = action.payload.user
+      state.user = action.payload
     },
     setError: (state, action) => {
       state.error = action.payload
@@ -41,6 +45,7 @@ const authSlice = createSlice({
       state.refresh_token = null
       state.expired_date = null
       state.isAuthenticated = false
+      state.user = {}
     },
   },
 })
@@ -55,6 +60,7 @@ const reducer = persistReducer(
       'refresh_token',
       'expired_date',
       'isAuthenticated',
+      'user',
     ],
   },
   authSlice.reducer

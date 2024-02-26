@@ -1,29 +1,23 @@
 import { Divider, List, Modal, Typography } from 'antd'
 import React from 'react'
 import DeleteModal from '@/shared/components/DeleteModal'
-import ResetPasswordEditForm from '@/shared/components/Forms/ResetPasswordEditForm'
-import TeamsEditForm from '@/shared/components/Forms/TeamsForms/TeamsEditForm'
-import ViewDrawer from '@/shared/components/ViewDrawer'
-import { ProjectUsersDataSource } from '@/shared/custom/utils'
 import { View } from './View'
+import Edit from '../../Teams/Modals/Edit'
 const { Title, Text, Paragraph } = Typography
 
-const Modals = ({ isOpen, setOpen, actionType }) => {
+const Modals = ({ isOpen, setOpen, actionType, entityname, onDelete }) => {
   const teamsActions = {
-    view: <View isOpen={isOpen} setOpen={setOpen} />,
-    update: (
-      <Modal
-        title='Edit modal'
-        centered
-        open={isOpen}
-        onOk={() => setOpen(false)}
-        onCancel={() => setOpen(false)}
-      >
-        <TeamsEditForm />
-      </Modal>
+    view: <View isOpen={isOpen} setOpen={setOpen} actionType={actionType} />,
+    edit: <Edit isOpen={isOpen} setOpen={setOpen} actionType={actionType} />,
+    delete: (
+      <DeleteModal
+        entityname={entityname}
+        onDelete={onDelete}
+        isOpen={isOpen}
+        setOpen={setOpen}
+      />
     ),
-    delete: <DeleteModal isOpen={isOpen} setOpen={setOpen} />,
   }
-  return teamsActions[actionType]
+  return teamsActions[actionType?.type] || null
 }
 export default Modals
