@@ -1,6 +1,7 @@
 import { createApi, retry } from '@reduxjs/toolkit/query/react'
 import { APIBaseQuery } from '../axiosBase'
 import { toast } from 'sonner'
+import { message } from 'antd'
 
 const VALIDATOR = ['Users']
 
@@ -20,46 +21,43 @@ export const userApi = createApi({
         providesTags: VALIDATOR,
         transformResponse: (res) => res.sort((a, b) => b.user_id - a.user_id),
       }),
-      // getAllUsers: builder.query({
-      //   query() {
-      //     return {
-      //       url: `user/filter?firstName=shumen&lastName=Mehdiyeva&page=1&pageSize=20`,
-      //     }
-      //   },
-      //   providesTags: VALIDATOR,
-      //   transformResponse: (res) => res.sort((a, b) => b.user_id - a.user_id),
-      // }),
       getUserById: builder.query({
         query(user_id) {
           return {
             url: `user/${user_id}`,
           }
         },
+        providesTags: VALIDATOR,
       }),
       userFilter: builder.query({
-        query({ firstName, lastName, teamIds, projectsIds }) {
-          let url_ = 'user/filter?'
-          if (firstName) {
-            url_ += `firstName=${firstName}&`
-          }
-          if (lastName) {
-            url_ += `lastName=${lastName}&`
-          }
+        query: ({
+          firstName,
+          lastName,
+          teamIds,
+          projectIds,
+          page,
+          pageSize,
+        }) => {
+          const queryParams = new URLSearchParams({
+            ...(page && { page }),
+            ...(pageSize && { pageSize }),
+            ...(firstName && { firstName }),
+            ...(lastName && { lastName }),
+          })
           if (teamIds && teamIds.length > 0) {
             teamIds.forEach((id) => {
-              url_ += `teamIds=${id}&`
+              queryParams.append('teamIds', id)
             })
           }
-          if (projectsIds && projectsIds.length > 0) {
-            projectsIds.forEach((id) => {
-              url_ += `projectIds=${id}&`
+          if (projectIds && projectIds.length > 0) {
+            projectIds.forEach((id) => {
+              queryParams.append('projectIds', id)
             })
           }
-          // url_ = url_.slice(0, -1)
-          return {
-            url: `user/filter?${url_}`,
-          }
+          const url = `user/filter?${queryParams.toString()}`
+          return { url }
         },
+        providesTags: VALIDATOR,
       }),
       deleteUser: builder.mutation({
         query(user_id) {
@@ -69,17 +67,15 @@ export const userApi = createApi({
             data: user_id,
           }
         },
+        invalidatesTags: VALIDATOR,
         async onQueryStarted(_, { queryFulfilled }) {
           try {
             const { data } = await queryFulfilled
             toast.success(data.msg)
           } catch (error) {
-            // toast.error(error.error.data.message)
-            console.log(error)
+            return error
           }
         },
-        // transformErrorResponse: (error) => error,
-        invalidatesTags: VALIDATOR,
       }),
       createUser: builder.mutation({
         query(data) {
@@ -94,10 +90,9 @@ export const userApi = createApi({
           try {
             const { data } = await queryFulfilled
             toast.success(data.msg)
-            console.log(data)
           } catch (error) {
             toast.error(error.msg)
-            console.log(error)
+            return error
           }
         },
       }),
@@ -115,37 +110,63 @@ export const userApi = createApi({
             const { data } = await queryFulfilled
             toast.success(data.msg)
           } catch (error) {
-            console.log(error)
+            return error
           }
         },
       }),
       resetUserPassword: builder.mutation({
-        query({ user_id, newPassword, ...rest }) {
+        query({ user_id, newPassword }) {
           return {
             url: `user/resetPassword/${user_id}?newPassword=${newPassword}`,
             method: 'POST',
-            data: rest,
+            data: newPassword,
           }
         },
         async onQueryStarted(_, { queryFulfilled }) {
           try {
             const { data } = await queryFulfilled
             toast.success('Password resetting was successful')
-            console.log(data)
           } catch (error) {
             toast.error(error)
-            console.log(error)
           }
         },
         invalidatesTags: VALIDATOR,
       }),
       updateUser: builder.mutation({
-        query: ({ user_id, ...rest }) => ({
-          url: `/users/${user_id}`,
-          method: 'PUT',
-          data: rest,
-        }),
+        query({ user_id, ...data }) {
+          return {
+            url: `user/${user_id}`,
+            method: 'PUT',
+            data,
+          }
+        },
+        async onQueryStarted(_, { queryFulfilled }) {
+          try {
+            const { data } = await queryFulfilled
+            toast.success(data.msg)
+          } catch (error) {
+            // message.error(error?.message)
+          }
+        },
         invalidatesTags: VALIDATOR,
+      }),
+      changeUserPassword: builder.mutation({
+        query(data) {
+          return {
+            url: 'user/changePassword',
+            method: 'POST',
+            data,
+          }
+        },
+        invalidatesTags: VALIDATOR,
+        async onQueryStarted(_, { queryFulfilled }) {
+          try {
+            const { data } = await queryFulfilled
+            toast.success('Password successfully changed')
+          } catch (error) {
+            toast.error(error.message)
+          }
+        },
       }),
     }
   },
@@ -158,6 +179,7 @@ export const {
   useCreateUserMutation,
   useDeleteUserMutation,
   useChangeStatusMutation,
+  useChangeUserPasswordMutation,
   useResetUserPasswordMutation,
   useUpdateUserMutation,
 } = userApi

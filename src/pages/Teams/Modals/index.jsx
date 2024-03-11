@@ -1,9 +1,7 @@
-import { Divider, List, Modal, Typography } from 'antd'
 import React from 'react'
 import DeleteModal from '@/shared/components/DeleteModal'
 import { View } from './View'
 import Edit from '../../Teams/Modals/Edit'
-const { Title, Text, Paragraph } = Typography
 
 const Modals = ({ isOpen, setOpen, actionType, entityname, onDelete }) => {
   const teamsActions = {

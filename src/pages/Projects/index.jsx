@@ -7,29 +7,29 @@ import Create from './Modals/Create'
 import Filter from './Modals/Filter'
 import { useGetProjectsQuery } from '@/redux/api/projects'
 import ActionButtons from '@/shared/components/ActionButtons'
+import { ActionTypes } from '@/shared/constants/actionTypes'
 import { useModal } from '@/hooks'
 
-function Projects() {
-  const { isOpen, setOpen, openModal, closeModal } = useModal()
-  const [modalState, setModalState] = useState({
-    filter: false,
-    create: false,
-  })
-  const [pageState, setPageState] = useState({
-    current: 1,
-    pageSize: 3,
-  })
+function Projects({ role }) {
+  const {
+    isOpen,
+    setOpen,
+    pageState,
+    setPageState,
+    tableParams,
+    setTableParams,
+    modalState,
+    setModalState,
+  } = useModal()
+  const [projectName, setProjectName] = useState('')
   const { data: projects } = useGetProjectsQuery({
     page: pageState.current,
-    pageSize: pageState.pageSize,
+    projectName: projectName,
   })
+
+  console.log(projects)
   const [actionType, setActionType] = useState(null)
-  const [tableParams, setTableParams] = useState({
-    pagination: {
-      current: pageState.current,
-      pageSize: pageState.pageSize,
-    },
-  })
+
   const updateData = useMemo(() => {
     return projects?.content?.map((project) => ({
       name: project?.name,
@@ -41,18 +41,13 @@ function Projects() {
       pagination,
       filters,
       ...sorter,
-      // total: projects,
     })
   }
-  const ActionTypes = {
-    VIEW: 'view',
-    EDIT: 'edit',
-  }
+
   const actions = ['view', 'edit']
   const icons = [viewBtn, editBtn]
 
   const handleAction = (action, record) => {
-    console.log(record)
     const actionConfig = {
       [ActionTypes.VIEW]: { type: ActionTypes.VIEW },
       [ActionTypes.EDIT]: { type: ActionTypes.EDIT },
@@ -60,13 +55,11 @@ function Projects() {
 
     const config = actionConfig[action]
     if (config) {
-      console.log(isOpen)
       setOpen(true)
       setActionType({
         ...config,
         projectId: record?.key,
       })
-      console.log(actionType, 'from handle')
     }
   }
 
@@ -82,6 +75,7 @@ function Projects() {
       key: 'actions',
       render: (_, record) => (
         <ActionButtons
+          role={role}
           actions={actions}
           icons={icons}
           handleAction={handleAction}
@@ -91,37 +85,17 @@ function Projects() {
     },
   ]
 
-  // const ProjectColumns = (handleAction) => [
-  //   {
-  //     title: 'Name',
-  //     dataIndex: 'name',
-  //     key: 'name',
-  //   },
-  //   {
-  //     title: 'Actions',
-  //     dataIndex: 'actions',
-  //     key: 'actions',
-  //     render: (_, record) => (
-  //       <ActionButtons
-  //         actions={actions}
-  //         icons={icons}
-  //         handleAction={handleAction}
-  //         record={record}
-  //       />
-  //     ),
-  //   },
-  // ]
-
   return (
     <>
       <Modals actionType={actionType} isOpen={isOpen} setOpen={setOpen} />
       <div className='buttons'>
         <Filter
-          modalOpen={modalState.create}
+          setProjectName={setProjectName}
+          modalOpen={modalState.filter}
           setModalOpen={(isOpen) =>
             setModalState((prevState) => ({
               ...prevState,
-              create: isOpen,
+              filter: isOpen,
             }))
           }
         />

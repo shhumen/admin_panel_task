@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import {
-  AntDesignOutlined,
   FileOutlined,
   ProjectOutlined,
   TeamOutlined,
@@ -10,10 +9,7 @@ import {
 import { Layout, Menu } from 'antd'
 const { Sider } = Layout
 import home from '@/shared/media/imgs/Home.svg'
-
 import Logo from '@/shared/media/imgs/crocusoft_logo.png'
-import { Items } from '../../custom/utils'
-
 import styles from './style.module.scss'
 
 const Sidebar = ({ collapsed, user }) => {

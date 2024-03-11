@@ -1,9 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { Table } from 'antd'
+import React, { useMemo, useState } from 'react'
+import { Layout, Table } from 'antd'
 import {
-  useGetUsersQuery,
   useChangeStatusMutation,
-  useCreateUserMutation,
   useDeleteUserMutation,
 } from '@/redux/api/user'
 import { useModal } from '@/hooks'
@@ -14,45 +12,62 @@ import ActionButtons from '@/shared/components/ActionButtons'
 import { ActionTypes } from '@/shared/constants/actionTypes'
 import { viewBtn, editBtn, deleteBtn, keyBtn } from '@/shared/media'
 import styles from '@/styles/table.module.scss'
+import { useUserFilterQuery } from '@/redux/api/user'
+import CustomPagination from '@/shared/components/Pagination'
+import { checkRoles } from '@/shared/components/CheckRoles'
 
-const Employee = () => {
-  const { data } = useGetUsersQuery()
-  const [deleteUser] = useDeleteUserMutation()
-  const [changeStatus] = useChangeStatusMutation()
-  const { isOpen, setOpen, openModal, closeModal } = useModal()
+const Employee = ({ role }) => {
+  const { checkHead } = checkRoles(role)
+  const {
+    isOpen,
+    setOpen,
+    modalState,
+    setModalState,
+    handlePageChange,
+    openModal,
+    pageState,
+  } = useModal()
+
   const [actionType, setActionType] = useState(null)
-  const [modalState, setModalState] = useState({
-    filter: false,
-    create: false,
+  const [user, setUser] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    projectIds: null,
+    teamIds: null,
   })
-  const [tableParams, setTableParams] = useState({
-    pagination: {
-      current: 1,
-      pageSize: 5,
-    },
-  })
-
   const actions = ['view', 'edit', 'delete', 'resetPassword']
   const icons = [viewBtn, editBtn, deleteBtn, keyBtn]
 
-  const updateData = useMemo(() => {
-    return data?.map((item) => ({
-      fullname: item?.fullname,
-      email: item?.email,
-      teamName: item?.teamName,
-      status: item?.status,
-      role: item?.role,
-      key: item?.user_id,
-    }))
-  }, [data])
+  // mutations
+  const [deleteUser] = useDeleteUserMutation()
+  const [changeStatus] = useChangeStatusMutation()
 
-  const handleTableChange = (pagination, filters, sorter) => {
-    setTableParams({
-      pagination,
-      filters,
-      ...sorter,
-    })
-  }
+  // queries
+  const { data: usersFilter } = useUserFilterQuery({
+    page: pageState.current,
+    pageSize: pageState.pageSize,
+    ...user,
+  })
+
+  const updatedData = useMemo(() => {
+    return usersFilter?.content
+      ?.map((item) => ({
+        name: item?.name,
+        surname: item?.surname,
+        email: item?.email,
+        team: item?.team?.name,
+        status: item?.status,
+        role: item?.role?.roleEnum,
+        key: item?.id,
+      }))
+      .filter(
+        (user) =>
+          user.role !== role &&
+          user.role !== 'SUPERADMIN' &&
+          user.role !== 'HEAD'
+      )
+  }, [usersFilter])
 
   const handleAction = (action, record) => {
     const actionConfig = {
@@ -64,26 +79,33 @@ const Employee = () => {
 
     const config = actionConfig[action]
     if (config) {
-      setOpen(true)
+      openModal()
       setActionType({
         ...config,
         userId: record?.key,
       })
     }
   }
+
   const handleDeleteEmployee = async () => {
     await deleteUser(actionType?.userId)
   }
+
   const handleChangeStatus = async ({ user_id, currentStatus }) => {
     const newStatus = currentStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE'
-    await changeStatus({ user_id, status: newStatus })
+    !checkHead && (await changeStatus({ user_id, status: newStatus }))
   }
 
   const EmployeesColumns = (handleAction) => [
     {
-      title: 'Full Name',
-      dataIndex: 'fullname',
-      key: 'fullname',
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: ' Surname',
+      dataIndex: 'surname',
+      key: 'surname',
     },
     {
       title: 'Mail',
@@ -92,8 +114,8 @@ const Employee = () => {
     },
     {
       title: 'Team',
-      dataIndex: 'teamName',
-      key: 'teamName',
+      dataIndex: 'team',
+      key: 'team',
     },
     {
       title: 'Status',
@@ -101,6 +123,7 @@ const Employee = () => {
       key: 'status',
       render: (text, record) => (
         <span
+          style={{ cursor: 'pointer' }}
           onClick={() =>
             handleChangeStatus({ user_id: record.key, currentStatus: text })
           }
@@ -122,6 +145,7 @@ const Employee = () => {
       key: 'actions',
       render: (_, record) => (
         <ActionButtons
+          role={role}
           actions={actions}
           icons={icons}
           handleAction={handleAction}
@@ -132,7 +156,7 @@ const Employee = () => {
   ]
 
   return (
-    <>
+    <Layout className='employee'>
       <Modals
         entityname='employee'
         onDelete={handleDeleteEmployee}
@@ -142,6 +166,7 @@ const Employee = () => {
       />
       <div className='buttons'>
         <Filter
+          setUser={setUser}
           modalOpen={modalState.filter}
           setModalOpen={(isOpen) =>
             setModalState((prevState) => ({
@@ -150,33 +175,36 @@ const Employee = () => {
             }))
           }
         />
-        <br />
-        <Create
-          modalOpen={modalState.create}
-          setModalOpen={(isOpen) =>
-            setModalState((prevState) => ({
-              ...prevState,
-              create: isOpen,
-            }))
-          }
-        />
+        {!checkHead && (
+          <Create
+            modalOpen={modalState.create}
+            setModalOpen={(isOpen) =>
+              setModalState((prevState) => ({
+                ...prevState,
+                create: isOpen,
+              }))
+            }
+          />
+        )}
       </div>
       <Table
         className={styles.table}
         columns={EmployeesColumns(handleAction)}
-        title={() => {
-          ;<div className={styles.table_header}>
+        title={() => (
+          <div className={styles.table_header}>
             <p className='title'>All Employees</p>
           </div>
-        }}
-        dataSource={updateData}
-        onChange={handleTableChange}
-        pagination={{
-          ...tableParams.pagination,
-          pageSizeOptions: [1, 2, 3, 4],
-        }}
+        )}
+        dataSource={updatedData}
+        pagination={false}
       />
-    </>
+      <CustomPagination
+        totalElements={usersFilter?.TotalElements || 1}
+        pageSize={pageState.pageSize}
+        currentPage={pageState.current}
+        onPageChange={handlePageChange}
+      />
+    </Layout>
   )
 }
 

@@ -1,8 +1,5 @@
 import styles from './style.module.scss'
-import teams from '@/shared/media/imgs/teams.svg'
-import users from '@/shared/media/imgs/users.svg'
-import project from '@/shared/media/imgs/project.svg'
-import reports from '@/shared/media/imgs/reports.svg'
+import { teams, users, project, reports } from '@/shared/media'
 import { Card, Col, Row } from 'antd'
 import { Typography } from 'antd'
 import { useNavigate } from 'react-router-dom'
@@ -10,6 +7,7 @@ const { Title } = Typography
 
 const Home = () => {
   const navigate = useNavigate()
+
   return (
     <div className={styles.Home}>
       <Row>

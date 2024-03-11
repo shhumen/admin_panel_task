@@ -1,67 +1,112 @@
-import React from 'react'
-// import EditModal from '@/shared/components/EditModal'
-import { Form, Input, Modal, Select } from 'antd'
-import { validateMessages } from '@/validation'
+import React, { useEffect } from 'react'
+import { Button, Divider, Flex, Form, Input, Modal, Select } from 'antd'
+import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { editProjectSchema } from '@/validation'
+import {
+  useUpdateProjectMutation,
+  useGetProjectByIdQuery,
+} from '@/redux/api/projects'
+import { useUserFilterQuery } from '@/redux/api/user'
 
-const onFinish = (values) => {
-  console.log('Success:', values)
-}
-const onFinishFailed = (errorInfo) => {
-  console.log('Failed:', errorInfo)
-}
+function Edit({ isOpen, setOpen, actionType }) {
+  const projectId = actionType?.projectId
+  const [updateProject, { isSuccess }] = useUpdateProjectMutation()
+  const { data: projectDetails } = useGetProjectByIdQuery(actionType?.projectId)
 
-function Edit({ isOpen, setOpen }) {
+  const { data: userFilter } = useUserFilterQuery({
+    page: 1,
+  })
+
+  const {
+    handleSubmit,
+    formState: { errors },
+    getValues,
+    reset,
+    control,
+  } = useForm({
+    resolver: zodResolver(editProjectSchema),
+  })
+
+  useEffect(() => {
+    if (projectDetails) {
+      const { name, employees } = projectDetails
+      reset({ name, employeeIds: employees?.map((employee) => employee.id) })
+    }
+  }, [projectDetails, reset])
+
+  const onSubmit = (formData) => {
+    updateProject({
+      project_id: projectId,
+      name: getValues().name,
+      employeeIds: getValues().employeeIds,
+    })
+    setOpen(false)
+  }
+
   return (
-    <Modal isOpen={isOpen} setOpen={setOpen}>
-      <Form
-        name='basic'
-        labelCol={{
-          span: 6,
-        }}
-        wrapperCol={{
-          span: 18,
-        }}
-        initialValues={{
-          remember: true,
-        }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        autoComplete='off'
-        validateMessages={validateMessages}
-      >
-        <Form.Item
-          label='Project Name'
-          name='projectName'
-          rules={[
-            {
-              required: true,
-              message: 'Please input your project name!',
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item label='Employees' name='status' rules={[{ required: true }]}>
-          <Select
-            mode='multiple'
-            allowClear
-            style={{
-              width: '100%',
-            }}
-            placeholder='Please select'
-            // defaultValue={['a10', 'c12']}
-            // onChange={handleChange}
-            options={[
-              { value: 'John', label: 'John' },
-              { value: 'Xender', label: 'Xender' },
-              { value: 'Denver', label: 'Denver' },
-              { value: 'Anakin', label: 'Anakin' },
-              { value: 'Alex', label: 'Alex' },
-            ]}
+    <Modal
+      title='Edit Project'
+      centered
+      open={isOpen}
+      footer={null}
+      onCancel={() => setOpen(false)}
+    >
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Flex vertical>
+          <Controller
+            name='name'
+            control={control}
+            render={({ field }) => (
+              <Input
+                variant='filled'
+                placeholder='Project Name'
+                className='input'
+                {...field}
+              />
+            )}
           />
-        </Form.Item>
-      </Form>
+          <Divider style={{ margin: '7px' }} />
+          <Controller
+            name='employeeIds'
+            control={control}
+            render={({ field }) => (
+              <Select
+                mode='multiple'
+                allowClear
+                style={{
+                  width: '100%',
+                }}
+                placeholder='Please select'
+                options={userFilter?.content
+                  ?.filter((user) => {
+                    return (
+                      user?.status !== 'INACTIVE' &&
+                      user?.role.id !== 1 &&
+                      user?.role.id !== 2
+                    )
+                  })
+                  .map((item) => ({
+                    value: item.id,
+                    label: (
+                      <div className='options'>
+                        <span>
+                          {item.surname} {item.name}
+                        </span>
+                        <span className='option_status'>
+                          {item?.role?.roleEnum}
+                        </span>
+                      </div>
+                    ),
+                  }))}
+                {...field}
+              />
+            )}
+          />
+          <Divider style={{ margin: '7px' }} />
+        </Flex>
+        <Button htmlType='submit'>Edit</Button>
+      </form>
     </Modal>
   )
 }

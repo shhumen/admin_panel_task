@@ -39,7 +39,7 @@ export const teamsApi = createApi({
           const { data } = await queryFulfilled
           toast.success(data)
         } catch (error) {
-          toast.error(error.message)
+          return error
         }
       },
     }),
@@ -51,21 +51,19 @@ export const teamsApi = createApi({
           data,
         }
       },
-      invalidatesTags: VALIDATOR,
       async onQueryStarted(_, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
-          // toast.success(data.msg)
-          console.log(data)
+          toast.success(data.msg)
         } catch (error) {
-          // toast.error(error.msg)
-          console.log(error)
+          return error
         }
       },
+      invalidatesTags: VALIDATOR,
     }),
 
     updateTeam: builder.mutation({
-      query(team_id, ...data) {
+      query({ team_id, ...data }) {
         return {
           url: `teams/${team_id}`,
           method: 'PUT',

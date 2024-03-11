@@ -1,33 +1,18 @@
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
-import {
-  Button,
-  ConfigProvider,
-  Dropdown,
-  Layout,
-  Menu,
-  Switch,
-  Tooltip,
-} from 'antd'
+import { Button, ConfigProvider, Tooltip } from 'antd'
 import { Header } from 'antd/es/layout/layout'
-import React, { useState } from 'react'
+import React from 'react'
 import styles from './style.module.scss'
-// import lock from '@/shared/media/imgs/lock.svg'
-import lockLight from '@/shared/media/imgs/lock_light.svg'
-import lockDark from '@/shared/media/imgs/lock_dark.svg'
-import moon from '@/shared/media/imgs/moon.svg'
-import sun from '@/shared/media/imgs/sun.svg'
-import Logout from '@/shared/media/imgs/logout.svg'
-import avatarHeader from '@/shared/media/imgs/avatarHeader.svg'
-import ChangePassword from '../../components/ChangePassword'
-import { logout } from '../../../redux/features/auth/authSlice'
+import { lockLight, lockDark, Logout, avatarHeader } from '@/shared/media'
+import ChangePassword from '@/shared/components/ChangePassword'
+import { logout } from '@/redux/features/auth/authSlice'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
-import ThemeSwitch from '../../components/themeSwitcher'
+import ThemeSwitch from '@/shared/components/themeSwitcher'
+import { useModal } from '@/hooks'
 const Header_ = ({ collapsed, setCollapsed, themes, setThemes, user }) => {
-  console.log(user)
-  const [modalOpen, setModalOpen] = useState(false)
-  const [current, setCurrent] = useState('1')
+  const { isOpen, setOpen } = useModal()
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -37,25 +22,6 @@ const Header_ = ({ collapsed, setCollapsed, themes, setThemes, user }) => {
     navigate('/')
   }
 
-  const items = [
-    {
-      key: '1',
-      label: (
-        <a
-          target='_blank'
-          rel='noopener noreferrer'
-          href='https://www.antgroup.com'
-        >
-          Logout
-        </a>
-      ),
-    },
-  ]
-  const onClick = (e) => {
-    console.log('click ', e)
-
-    setCurrent(e.key)
-  }
   return (
     <ConfigProvider>
       <Header className={styles.header} style={{ padding: '0' }}>
@@ -73,9 +39,11 @@ const Header_ = ({ collapsed, setCollapsed, themes, setThemes, user }) => {
         <ThemeSwitch themes={themes} setThemes={setThemes} />
         <div className={styles.account}>
           <Tooltip placement='bottom' title={`${user.name} ${user.surname}`}>
-            <div className={styles.user}>
-              <img src={avatarHeader} alt='avatar' />
-            </div>
+            <Link to='/profile'>
+              <div className={styles.user}>
+                <img src={avatarHeader} alt='avatar' />
+              </div>
+            </Link>
           </Tooltip>
           <div className={styles.name}>
             <Button className={styles.logout} onClick={handleLogout}>
@@ -83,7 +51,7 @@ const Header_ = ({ collapsed, setCollapsed, themes, setThemes, user }) => {
             </Button>
           </div>
           <div className={styles.private}>
-            <button onClick={() => setModalOpen(true)}>
+            <button onClick={() => setOpen(true)}>
               {themes === 'DARK' ? (
                 <img src={lockLight} alt='lock_light' />
               ) : (
@@ -93,7 +61,7 @@ const Header_ = ({ collapsed, setCollapsed, themes, setThemes, user }) => {
           </div>
         </div>
       </Header>
-      <ChangePassword modalOpen={modalOpen} setModalOpen={setModalOpen} />
+      <ChangePassword isOpen={isOpen} setOpen={setOpen} />
     </ConfigProvider>
   )
 }

@@ -1,13 +1,12 @@
 import { Button, Modal, Space, Typography } from 'antd'
+import Paragraph from 'antd/es/skeleton/Paragraph'
 import React from 'react'
 
 const { Title } = Typography
 
 const DeleteModal = ({ isOpen, setOpen, entityname, onDelete }) => {
-  console.log(entityname)
   const handleDelete = () => {
     onDelete()
-    console.log('delete')
     setOpen(false)
   }
 
@@ -23,10 +22,10 @@ const DeleteModal = ({ isOpen, setOpen, entityname, onDelete }) => {
       okButtonProps={{ className: 'delete' }}
     >
       <Space />
-      <Title level={5}>
+      <p className='delete_modal_body'>
         Do you really want to delete this {entityname}? This process cannot be
         undone.
-      </Title>
+      </p>
     </Modal>
   )
 }

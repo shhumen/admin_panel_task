@@ -22,7 +22,6 @@ export const authApi = createApi({
           dispatch(setToken(data))
           await dispatch(authApi.endpoints.getMyProfile.initiate(data))
         } catch (error) {
-          console.log(error)
           toast.error(error.message)
         }
       },
@@ -38,12 +37,10 @@ export const authApi = createApi({
           const { data } = await queryFulfilled
           dispatch(setUserData(data))
         } catch (error) {
-          console.log(error)
           toast.error(error.message)
         }
       },
     }),
   }),
 })
-//  superadminpassword
 export const { useLoginMutation, useGetMyProfileQuery } = authApi

@@ -1,0 +1,12 @@
+.profile {
+  padding: 60px;
+  height: 60vh;
+
+  box-shadow: var(--box-shadow);
+  margin: 30px auto;
+  color: var(--primary-text-color) !important;
+  background-color: var(--secondary-color);
+  .user {
+    width: 100%;
+  }
+}

@@ -5,19 +5,15 @@ import { useGetTeamsByIdQuery } from '@/redux/api/teams'
 import Paragraph from 'antd/es/skeleton/Paragraph'
 
 export const View = ({ isOpen, setOpen, actionType }) => {
-  const teamId = actionType.teamId
+  const teamId = actionType?.teamId
   const { data: teamDetails, isLoading, isError } = useGetTeamsByIdQuery(teamId)
-  console.log(actionType)
-  console.log(teamId)
-  console.log(teamDetails)
   return (
     <Drawer onClose={() => setOpen(false)} open={isOpen} centered>
       <>
-        {teamId === undefined ? <p>Undefined Team Id</p> : ''}
+        {teamId === undefined ? <p>Undefined Team </p> : ''}
         {isLoading ? (
           <div style={{ textAlign: 'center', padding: '24px' }}>
             <Spin size='large' />
-            <Paragraph>Loading team details...</Paragraph>
           </div>
         ) : isError ? (
           <div style={{ textAlign: 'center', padding: '24px' }}>

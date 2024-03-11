@@ -1,31 +1,32 @@
 import React from 'react'
-import { Button, Flex, Input, Modal, Select } from 'antd'
-import create from '@/shared/media/imgs/create.svg'
+import { Button, Divider, Flex, Input, Modal, Select } from 'antd'
+import { create } from '@/shared/media'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useGetUsersQuery } from '@/redux/api/user'
+import { useUserFilterQuery } from '@/redux/api/user'
 import { createProjectSchema } from '@/validation'
 import { useCreateProjectMutation } from '@/redux/api/projects'
 
 function Create({ modalOpen, setModalOpen }) {
-  const { data } = useGetUsersQuery()
-  const [createProject] = useCreateProjectMutation()
-  console.log(data)
+  const { data: userFilter } = useUserFilterQuery({
+    page: 1,
+  })
+
+  const [createProject, { isSuccess }] = useCreateProjectMutation()
   const {
     handleSubmit,
     formState: { errors },
     control,
-    getValues,
+    reset,
   } = useForm({ resolver: zodResolver(createProjectSchema) })
 
   const handleCancel = () => {
     setModalOpen(false)
   }
   const onSubmit = (formData) => {
-    console.log(formData, 'formsdata')
-    console.log(getValues(), 'getvalue')
     createProject(formData)
-    // setModalOpen(false)
+    reset()
+    handleCancel()
   }
   return (
     <>
@@ -64,7 +65,7 @@ function Create({ modalOpen, setModalOpen }) {
                 <span className='error'>{errors.name.message}</span>
               )}
             </div>
-            <br />
+            <Divider style={{ margin: '7px' }} />
             <Controller
               name='employeeIds'
               control={control}
@@ -76,10 +77,27 @@ function Create({ modalOpen, setModalOpen }) {
                     width: '100%',
                   }}
                   placeholder='Please select'
-                  options={data.map((item) => ({
-                    value: item.user_id,
-                    label: item.fullname,
-                  }))}
+                  options={userFilter?.content
+                    ?.filter((user) => {
+                      return (
+                        user?.status !== 'INACTIVE' &&
+                        user?.role.id !== 1 &&
+                        user?.role.id !== 2
+                      )
+                    })
+                    .map((item) => ({
+                      value: item.id,
+                      label: (
+                        <div className='options'>
+                          <span>
+                            {item.surname} {item.name}
+                          </span>
+                          <span className='option_status'>
+                            {item?.role?.roleEnum}
+                          </span>
+                        </div>
+                      ),
+                    }))}
                   {...field}
                 />
               )}

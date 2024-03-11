@@ -1,121 +1,147 @@
-import { Button, Drawer, Modal } from 'antd'
-import React, { useState } from 'react'
+import { Button, Divider, Drawer, Flex } from 'antd'
+import React from 'react'
 import filter from '@/shared/media/imgs/filter.svg'
 import styles from './style.module.scss'
-import { Form, Input, Select } from 'antd'
-import { validateMessages } from '@/validation'
+import { Input, Select } from 'antd'
+import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { filterEmployeeSchema } from '@/validation'
+import { useGetRolesQuery } from '@/redux/api/roles'
+import { useGetTeamsQuery } from '@/redux/api/teams'
+import { useSelector } from 'react-redux'
+import { useGetProjectsQuery } from '@/redux/api/projects'
 
-const onFinish = (values) => {
-  console.log('Success:', values)
-}
-const onFinishFailed = (errorInfo) => {
-  console.log('Failed:', errorInfo)
-}
+const Filter = ({ setUser, modalOpen, setModalOpen }) => {
+  const { data: roles } = useGetRolesQuery()
+  const { data: projects } = useGetProjectsQuery({
+    page: 1,
+  })
+  const { data: teams } = useGetTeamsQuery()
+  const {
+    handleSubmit,
+    formState: { errors },
+    getValues,
+    reset,
+    control,
+  } = useForm({
+    resolver: zodResolver(filterEmployeeSchema),
+  })
 
-console.log('render')
+  const onSubmit = () => {
+    setUser((prevState) => ({
+      ...prevState,
+      firstName: getValues().firstname,
+      lastName: getValues().lastname,
+      email: getValues().email,
+      teamIds: getValues().teamIds,
+      projectIds: getValues().projectIds,
+    }))
+    setModalOpen(false)
+  }
 
-const Filter = ({ modalOpen, setModalOpen }) => {
   return (
     <>
       <button
-        className={styles.filter_btn}
+        className='filter_btn'
         type='primary'
         onClick={() => setModalOpen(true)}
       >
         <img src={filter} alt='filter' />
       </button>
       <Drawer
-        title='Filter modal'
         centered
         open={modalOpen}
-        onOk={() => setModalOpen(false)}
         onClose={() => setModalOpen(false)}
         okButtonProps={{ className: 'filter' }}
         okText='Filter'
       >
-        <Form
-          className='filter'
-          name='basic'
-          labelCol={{
-            span: 5,
-          }}
-          wrapperCol={{
-            span: 19,
-          }}
-          initialValues={{
-            remember: true,
-          }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete='off'
-          validateMessages={validateMessages}
-        >
-          <Form.Item
-            label='Firstname'
-            name='firstname'
-            rules={[
-              {
-                required: true,
-                message: 'Please input your firstname!',
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label='Lastname'
-            name='lastname'
-            rules={[
-              {
-                required: true,
-                message: 'Please input your lastname!',
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item label='Teams' name='teams' rules={[{ required: true }]}>
-            <Select
-              mode='multiple'
-              allowClear
-              style={{
-                width: '100%',
-              }}
-              placeholder='Please select'
-              // defaultValue={['a10', 'c12']}
-              // onChange={handleChange}
-              options={[
-                { value: 'Mobile', label: 'Mobile' },
-                { value: 'Frontend', label: 'Frontend' },
-                { value: 'Backend', label: 'Backend' },
-              ]}
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Flex vertical>
+            <h4>Filter Employees</h4>
+            <Divider />
+            <Controller
+              name='firstname'
+              control={control}
+              render={({ field }) => (
+                <Input
+                  variant='filled'
+                  placeholder='First Name'
+                  className='input'
+                  {...field}
+                />
+              )}
             />
-          </Form.Item>
-          <Form.Item
-            label='Projects'
-            name='projects'
-            rules={[{ required: true }]}
-          >
-            <Select
-              mode='multiple'
-              allowClear
-              style={{
-                width: '100%',
-              }}
-              placeholder='Please select'
-              options={[
-                { value: 'Plast', label: 'Plast' },
-                { value: 'Furniro', label: 'Furniro' },
-                { value: 'Dashboard X', label: 'Dashboard X' },
-              ]}
+            {errors.firstname && (
+              <span className='error'>{errors.firstname.message}</span>
+            )}
+            <Divider style={{ margin: '7px' }} />
+            <Controller
+              name='lastname'
+              control={control}
+              render={({ field }) => (
+                <Input
+                  variant='filled'
+                  placeholder='Last Name'
+                  className='input'
+                  {...field}
+                />
+              )}
             />
-          </Form.Item>
-          <Form.Item>
-            <button className='filter_btn'>Filter</button>
-          </Form.Item>
-        </Form>
+            <br />
+            {errors.lastname && (
+              <span className='error'>{errors.lastname.message}</span>
+            )}
+            <Divider style={{ margin: '7px' }} />
+            <Controller
+              name='projectIds'
+              control={control}
+              render={({ field }) => (
+                <Select
+                  mode='multiple'
+                  placeholder='Project'
+                  options={projects?.content?.map((project) => ({
+                    value: project?.project_id,
+                    label: project?.name,
+                  }))}
+                  {...field}
+                />
+              )}
+            />
+            <br />
+            {errors.role && (
+              <span className='error'>{errors.role.message}</span>
+            )}
+            <Divider style={{ margin: '7px' }} />
+            <Controller
+              name='teamIds'
+              control={control}
+              render={({ field }) => (
+                <Select
+                  mode='multiple'
+                  placeholder='Team'
+                  options={teams?.map((team) => ({
+                    value: team?.team_id,
+                    label: team?.name,
+                  }))}
+                  {...field}
+                />
+              )}
+            />
+            <br />
+            {errors.team_id && (
+              <span className='error'>{errors.team_id.message}</span>
+            )}
+          </Flex>
+          <br />
+          <div className='buttons_'>
+            <Button className='submit_btn' onClick={() => reset()}>
+              Reset
+            </Button>
+            <Button className='submit_btn' key='yes' htmlType='submit'>
+              Filter
+            </Button>
+          </div>
+        </form>
       </Drawer>
     </>
   )

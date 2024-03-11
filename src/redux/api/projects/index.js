@@ -9,12 +9,16 @@ export const projectsApi = createApi({
   baseQuery: APIBaseQuery,
   endpoints: (builder) => ({
     getProjects: builder.query({
-      query({ projectName = '', page, pageSize }) {
-        return {
-          url: `projects/search?${
-            projectName.length > 0 ? `?projectName=${projectName}` : ''
-          }&page=${page}&pageSize=${pageSize}`,
-        }
+      query: ({ projectName, page, pageSize }) => {
+        const queryParams = new URLSearchParams({
+          ...(page && { page }),
+          ...(pageSize && { pageSize }),
+          ...(projectName && { projectName }),
+        })
+
+        const url = `projects/search?${queryParams.toString()}`
+        console.log(url)
+        return { url }
       },
       providesTags: VALIDATOR,
     }),
@@ -36,6 +40,24 @@ export const projectsApi = createApi({
       },
       invalidatesTags: VALIDATOR,
     }),
+    updateProject: builder.mutation({
+      query({ project_id, ...data }) {
+        return {
+          url: `projects/${project_id}`,
+          method: 'PUT',
+          data,
+        }
+      },
+      async onQueryStarted(_, { queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+          toast.success('Update succeed')
+        } catch (error) {
+          toast.error(error.message)
+        }
+      },
+      invalidatesTags: VALIDATOR,
+    }),
   }),
 })
 
@@ -43,4 +65,5 @@ export const {
   useGetProjectsQuery,
   useGetProjectByIdQuery,
   useCreateProjectMutation,
+  useUpdateProjectMutation,
 } = projectsApi

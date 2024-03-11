@@ -1,7 +1,6 @@
 import React from 'react'
 import styles from './style.module.scss'
-import moon from '@/shared/media/imgs/moon.svg'
-import sun from '@/shared/media/imgs/sun.svg'
+import { moon, sun } from '@/shared/media'
 
 const ThemeSwitch = ({ themes, setThemes }) => {
   const toggleTheme = () => {

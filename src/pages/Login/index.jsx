@@ -9,7 +9,6 @@ import ThemeSwitch from '../../shared/components/themeSwitcher'
 const { Title } = Typography
 
 const Login = ({ themes, setThemes }) => {
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
   const [login, { isLoading, isError }] = useLoginMutation()
 
   const {
@@ -25,7 +24,7 @@ const Login = ({ themes, setThemes }) => {
   return (
     <div className={styles.Login}>
       <Row>
-        <Col xs={24} sm={12} md={12} lg={12} xl={12}>
+        <Col xs={24} sm={24} md={12} lg={12} xl={12}>
           <form className={styles.Form} onSubmit={handleSubmit(onSubmit)}>
             <ThemeSwitch themes={themes} setThemes={setThemes} />
             <h3>Sign in</h3>
@@ -75,7 +74,7 @@ const Login = ({ themes, setThemes }) => {
             </button>
           </form>
         </Col>
-        <Col xs={24} sm={12} md={12} lg={12} xl={12}>
+        <Col xs={0} sm={0} md={12} lg={12} xl={12}>
           <div className={styles.Layout}>
             <img src={loginImg} alt='Login' />
           </div>

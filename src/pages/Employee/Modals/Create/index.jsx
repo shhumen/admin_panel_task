@@ -1,8 +1,7 @@
-import { Button, Flex, Modal } from 'antd'
+import { Button, Divider, Flex, Modal } from 'antd'
 import { Input, Select } from 'antd'
-import create from '@/shared/media/imgs/create.svg'
+import { create } from '@/shared/media'
 import { useCreateUserMutation } from '@/redux/api/user'
-import { useGetProjectsQuery } from '@/redux/api/projects'
 import { useGetRolesQuery } from '@/redux/api/roles'
 import { useGetTeamsQuery } from '@/redux/api/teams'
 import { Controller, useForm } from 'react-hook-form'
@@ -13,25 +12,25 @@ import { useSelector } from 'react-redux'
 const Create = ({ modalOpen, setModalOpen }) => {
   const { data: roles } = useGetRolesQuery()
   const { data: teams } = useGetTeamsQuery()
-  const [createUser] = useCreateUserMutation()
+  const [createUser, { isSuccess }] = useCreateUserMutation()
   const { role } = useSelector((state) => state.auth.user)
 
   const roles_ = roles && roles.filter((role) => role.role_name !== 'HEAD')
-
+  const minRoleIds = {
+    SUPERADMIN: 1,
+    ADMIN: 2,
+  }
+  const minRoleId = minRoleIds[role?.roleEnum]
   const filteredRoles = roles_
-    ? role.roleEnum === 'SUPERADMIN'
-      ? roles_.filter((role) => role.role_id > 1)
-      : role.roleEnum === 'ADMIN'
-      ? roles_.filter((role) => role.role_id > 2)
-      : []
+    ? roles_.filter((role) => role?.role_id > minRoleId)
     : []
-  console.log(filteredRoles, 'filtered')
 
   const {
     handleSubmit,
     formState: { errors },
     getValues,
     control,
+    reset,
   } = useForm({
     resolver: zodResolver(createEmployeeSchema),
   })
@@ -52,6 +51,7 @@ const Create = ({ modalOpen, setModalOpen }) => {
 
       team_id: getValues().team_id,
     })
+    reset()
     setModalOpen(false)
   }
 
@@ -79,11 +79,14 @@ const Create = ({ modalOpen, setModalOpen }) => {
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <Flex vertical>
+            <Divider style={{ margin: '7px' }} />
+
             <Controller
               name='firstname'
               control={control}
               render={({ field }) => (
                 <Input
+                  type='text'
                   variant='filled'
                   placeholder='First Name'
                   className='input'
@@ -95,6 +98,7 @@ const Create = ({ modalOpen, setModalOpen }) => {
             {errors.firstname && (
               <span className='error'>{errors.firstname.message}</span>
             )}
+            <Divider style={{ margin: '7px' }} />
             <Controller
               name='lastname'
               control={control}
@@ -111,6 +115,7 @@ const Create = ({ modalOpen, setModalOpen }) => {
             {errors.lastname && (
               <span className='error'>{errors.lastname.message}</span>
             )}
+            <Divider style={{ margin: '7px' }} />
             <Controller
               name='email'
               control={control}
@@ -127,6 +132,7 @@ const Create = ({ modalOpen, setModalOpen }) => {
             {errors.email && (
               <span className='error'>{errors.email.message}</span>
             )}
+            <Divider style={{ margin: '7px' }} />
             <Controller
               name='password'
               control={control}
@@ -143,6 +149,7 @@ const Create = ({ modalOpen, setModalOpen }) => {
             {errors.password && (
               <span className='error'>{errors.password.message}</span>
             )}
+            <Divider style={{ margin: '7px' }} />
             <Controller
               name='role'
               control={control}
@@ -161,9 +168,12 @@ const Create = ({ modalOpen, setModalOpen }) => {
             {errors.role && (
               <span className='error'>{errors.role.message}</span>
             )}
+            <Divider style={{ margin: '7px' }} />
+
             <Controller
               name='team_id'
               control={control}
+              defaultValue={0}
               render={({ field }) => (
                 <Select
                   placeholder='Team'
@@ -179,10 +189,11 @@ const Create = ({ modalOpen, setModalOpen }) => {
             {errors.team_id && (
               <span className='error'>{errors.team_id.message}</span>
             )}
+            <Divider style={{ margin: '7px' }} />
           </Flex>
           <br />
-          <Button key='yes' htmlType='submit'>
-            Submit
+          <Button className='submit_btn' key='yes' htmlType='submit'>
+            Create
           </Button>
         </form>
       </Modal>

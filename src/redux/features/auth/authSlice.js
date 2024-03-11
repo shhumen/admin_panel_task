@@ -17,9 +17,6 @@ const initialState = {
       id: null,
       roleEnum: '',
     },
-    team: null,
-    project: [],
-    status: '',
   },
 }
 

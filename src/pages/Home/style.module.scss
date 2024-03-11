@@ -3,6 +3,9 @@
 .Home {
   color: var(--primary-text-color);
   margin: 20px 35px;
+  @include sm {
+    margin: 10px;
+  }
 
   h3 {
     color: $white;
@@ -16,6 +19,9 @@
 
       h3 {
         font-size: 20px;
+        @include sm {
+          font-size: 12px;
+        }
         color: var(--primary-text-color);
       }
 

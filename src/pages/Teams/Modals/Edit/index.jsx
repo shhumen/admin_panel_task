@@ -1,16 +1,14 @@
-import { Button, Flex, Form, Input, Modal, Select } from 'antd'
 import React, { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createTeamSchema } from '@/validation'
 import { useGetTeamsByIdQuery, useUpdateTeamMutation } from '@/redux/api/teams'
+import { editTeamSchema } from '@/validation'
+import { Button, Flex, Input, Modal } from 'antd'
 
 const Edit = ({ isOpen, setOpen, actionType }) => {
-  const teamId = actionType.teamId
-  const [updateTeam] = useUpdateTeamMutation()
+  const teamId = actionType?.teamId
+  const [updateTeam, { isSuccess }] = useUpdateTeamMutation()
   const { data: teamDetails } = useGetTeamsByIdQuery(actionType.teamId)
-  console.log(actionType)
-  console.log(teamDetails)
   const {
     handleSubmit,
     formState: { errors },
@@ -18,7 +16,7 @@ const Edit = ({ isOpen, setOpen, actionType }) => {
     reset,
     control,
   } = useForm({
-    resolver: zodResolver(createTeamSchema),
+    resolver: zodResolver(editTeamSchema),
   })
 
   useEffect(() => {
@@ -28,18 +26,14 @@ const Edit = ({ isOpen, setOpen, actionType }) => {
     }
   }, [teamDetails, reset])
 
-  console.log(errors)
-
   const onSubmit = () => {
-    console.log({
-      data: getValues().name,
+    updateTeam({
+      team_id: teamId,
+      team_name: getValues().name,
     })
-    // updateTeam(teamId, {
-    //   data: getValues().name,
-    // })
+    setOpen(false)
   }
 
-  console.log(getValues(), 'get')
   return (
     <Modal
       title='Edit Team'
@@ -58,15 +52,12 @@ const Edit = ({ isOpen, setOpen, actionType }) => {
                 variant='filled'
                 placeholder='Team Name'
                 className='input'
-                onChange={(e) => field.onChange(e.target.value)}
                 {...field}
               />
             )}
           />
           <br />
-          {errors.firstname && (
-            <span className='error'>{errors.team_name.message}</span>
-          )}
+          {errors.name && <span className='error'>{errors.name.message}</span>}
         </Flex>
         <br />
         <Button key='yes' htmlType='submit'>

@@ -1,28 +1,27 @@
 import React from 'react'
-import { Button, Flex, Form, Input, Modal, Select } from 'antd'
+import { Button, Divider, Flex, Form, Input, Modal, Select } from 'antd'
 import { resetPasswordSchema } from '@/validation'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useResetUserPasswordMutation } from '@/redux/api/user'
 
 const ResetPasswordModal = ({ isOpen, setOpen, actionType }) => {
-  const [resetUserPassword] = useResetUserPasswordMutation()
-
-  console.log(actionType)
+  const [resetUserPassword, { isSuccess }] = useResetUserPasswordMutation()
 
   const {
     handleSubmit,
     formState: { errors },
     control,
     getValues,
+    reset,
   } = useForm({ resolver: zodResolver(resetPasswordSchema) })
 
   const onSubmit = async (formData) => {
-    console.log(formData)
     const { newPassword } = formData
     const { userId } = actionType
     await resetUserPassword({ user_id: userId, newPassword })
     setOpen(false)
+    reset()
   }
 
   return (
@@ -50,7 +49,7 @@ const ResetPasswordModal = ({ isOpen, setOpen, actionType }) => {
           {errors.newPassword && (
             <span className='error'>{errors.newPassword.message}</span>
           )}
-          <br />
+          <Divider style={{ margin: '7px' }} />
           <Controller
             name='confirmPassword'
             control={control}
@@ -67,8 +66,10 @@ const ResetPasswordModal = ({ isOpen, setOpen, actionType }) => {
             <span className='error'>{errors.confirmPassword.message}</span>
           )}
         </Flex>
-        <br />
-        <Button>Submit</Button>
+        <Divider style={{ margin: '7px' }} />
+        <Button className='submit_btn' htmlType='submit'>
+          Reset
+        </Button>
       </form>
     </Modal>
   )

@@ -3,7 +3,10 @@
   border-radius: 12px;
   margin: 0 30px;
   padding: 20px;
-  // box-shadow: 1px 1px 1px 0px rgba(16, 25, 52, 0.4) !important;
+  @include sm {
+    margin: 0;
+    padding: 10px;
+  }
   box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px !important;
   background: var(--secondary-color) !important;
   border: 0.6px solid var(--primary-color);
@@ -17,6 +20,15 @@
 }
 .ant-table-cell {
   color: var(--light-color);
+  @include sm {
+    font-size: 12px;
+  }
+}
+
+.ant-pagination-item {
+  @include sm {
+    font-size: 12px;
+  }
 }
 
 .ant-table-cell:last-child {

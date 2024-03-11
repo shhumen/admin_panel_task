@@ -6,8 +6,21 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Lexend', sans-serif;
-  // font-weight: 300;
+  font-family: 'Lexend', sans-serif !important;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.ant-pagination {
+  position: fixed;
+  bottom: 20px;
+  right: 50px;
+}
+
+p {
+  margin: 0;
 }
 
 body {
@@ -184,6 +197,7 @@ button {
     color: var(--primary-text-color) !important;
   }
 }
+
 .edit {
   background-color: rgb(253, 181, 42);
 
@@ -218,15 +232,19 @@ button {
   color: #000;
 }
 
-.buttons {
+.buttons,
+.buttons_ {
   @include flexBox(flex-end);
-  margin: 30px 50px 10px 0px;
+  padding: 30px 60px;
   button {
     border: 1px solid var(--secondary-color);
     margin: 0 5px;
     border-radius: 7px;
     background-color: var(--secondary-color);
   }
+}
+.buttons_ {
+  padding: 0;
 }
 
 .filter {
@@ -343,13 +361,11 @@ button {
 
 .input {
   padding: 10px;
-  // background-color: rgba($color: #fff, $alpha: 0.7);
   background-color: transparent;
   border: 1px solid var(--menu-selected-color);
   color: var(--primary-text-color) !important;
 
   &:hover {
-    // background-color: rgba($color: transparent, $alpha: 0.7);
     background-color: transparent;
   }
 }
@@ -358,9 +374,61 @@ button {
   color: var(--primary-text-color) !important;
 }
 
+.ant-select-selector {
+  padding: 6px !important;
+}
 :where(.css-dev-only-do-not-override-1qhpsh8).ant-select-outlined:not(
     .ant-select-customize-input
   )
   .ant-select-selector {
   background-color: transparent;
+}
+
+.options {
+  @include flexBox(space-between);
+  color: #000 !important;
+
+  .option_status {
+    color: rgb(251, 63, 63);
+    text-transform: lowercase;
+    padding: 5px;
+  }
+}
+
+.ant-select-selection-item-content .options .option_status {
+  display: none;
+}
+
+.employee {
+  .ant-table-cell:not(:nth-child(7)) {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.desc p {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.desc_view p {
+  display: block;
+  max-width: 100%;
+  word-wrap: break-word;
+}
+
+.submit_btn {
+  background-color: var(--card-color) !important;
+  box-shadow: var(--box-shadow);
+  display: flex;
+  justify-content: flex-end;
+  border: none;
+}
+
+:where(.css-dev-only-do-not-override-1qhpsh8).ant-input-filled:focus {
+  border-color: var(--secondary-color-two) !important;
 }

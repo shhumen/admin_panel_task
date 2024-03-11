@@ -7,23 +7,22 @@ import { createTeamSchema } from '@/validation'
 import { useCreateTeamMutation } from '@/redux/api/teams'
 
 export const Create = ({ modalOpen, setModalOpen }) => {
-  const [createTeam] = useCreateTeamMutation()
+  const [createTeam, { isSuccess }] = useCreateTeamMutation()
 
   const {
     handleSubmit,
     formState: { errors },
     control,
-    getValues,
+    reset,
   } = useForm({ resolver: zodResolver(createTeamSchema) })
-
-  const onSubmit = (formData) => {
-    console.log(formData, 'formsdata')
-    createTeam(formData)
-    setModalOpen(false)
-  }
 
   const handleCancel = () => {
     setModalOpen(false)
+  }
+  const onSubmit = (formData) => {
+    createTeam(formData)
+    handleCancel()
+    reset()
   }
 
   return (

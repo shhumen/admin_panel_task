@@ -8,7 +8,7 @@ const Teams = lazy(() => import('./Teams'))
 const Projects = lazy(() => import('./Projects'))
 const DailyReports = lazy(() => import('./DailyReports'))
 const NotFound = lazy(() => import('./NotFound'))
-const ForgotPassword = lazy(() => import('./ForgotPassword'))
+const Profile = lazy(() => import('./Profile'))
 
 const PrivateRoute = ({ user }) => {
   const roleName = user?.role?.roleEnum
@@ -16,15 +16,18 @@ const PrivateRoute = ({ user }) => {
     <RenderIf conditions={!!roleName}>
       <Routes>
         {roleName === 'EMPLOYEE' ? (
-          <Route path='/' element={<DailyReports />} />
+          <>
+            <Route path='/profile' element={<Profile user={user} />} />
+            <Route path='/' element={<DailyReports role={roleName} />} />
+          </>
         ) : (
           <>
             <Route path='/' exact element={<Home />} />
-            <Route path='/users' element={<Employee />} />
-            <Route path='/teams' element={<Teams />} />
-            <Route path='/projects' element={<Projects />} />
-            <Route path='/reports' element={<DailyReports />} />
-            {/* <Route path='/otp' element={<ForgotPassword />} /> */}
+            <Route path='/users' element={<Employee role={roleName} />} />
+            <Route path='/teams' element={<Teams role={roleName} />} />
+            <Route path='/projects' element={<Projects role={roleName} />} />
+            <Route path='/reports' element={<DailyReports role={roleName} />} />
+            <Route path='/profile' element={<Profile user={user} />} />
             <Route path='*' element={<NotFound />} />
           </>
         )}

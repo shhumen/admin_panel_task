@@ -29,7 +29,6 @@
 }
 
 .Form {
-  // margin: 10% auto;
   height: 100vh;
   padding: 0 40px;
   @include flexBox(center, column);
@@ -80,8 +79,4 @@
     border-bottom: 1px solid var(--primary-text-color);
     color: var(--light-color) !important;
   }
-
-  // .ant-menu-item-selected {
-  //   color: #fff !important;
-  // }
 }

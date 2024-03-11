@@ -8,6 +8,7 @@ import { useGetUserByIdQuery } from '@/redux/api/user'
 const View = ({ isOpen, setOpen, actionType }) => {
   const userId = actionType?.userId
   const { data: userDetails, isLoading, isError } = useGetUserByIdQuery(userId)
+
   return (
     <Drawer
       open={isOpen}
@@ -17,7 +18,7 @@ const View = ({ isOpen, setOpen, actionType }) => {
       destroyOnClose
     >
       <>
-        {userId === undefined ? <p>Undefined user Id</p> : ''}
+        {userId === undefined ? <p>Undefined user </p> : ''}
         {isLoading ? (
           <div style={{ textAlign: 'center', padding: '24px' }}>
             <Spin size='large' />
@@ -45,11 +46,15 @@ const View = ({ isOpen, setOpen, actionType }) => {
             <p>Role: {userDetails?.role?.roleEnum}</p>
             <Divider />
 
+            <p>
+              Projects: <br />
+            </p>
             {userDetails?.project?.length > 0 ? (
-              <p>
-                Projects:{' '}
-                {userDetails?.project?.map((item) => item.name).join(',')}
-              </p>
+              <ul>
+                {userDetails?.project?.map((item) => (
+                  <li key={item.id}>{item.name}</li>
+                ))}
+              </ul>
             ) : (
               ''
             )}

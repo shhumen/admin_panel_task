@@ -46,11 +46,12 @@ export const APIBaseQuery = async (args, api, extraOptions) => {
     const userState = state.getState()
     const { auth } = userState
     const { user_id, access_token, refresh_token, expired_date } = auth
+
     const refreshResult = await APIBaseQueryInterceptor(
       {
         url: 'http://localhost:8081/v1/api/auth/refresh-token',
-        data: refresh_token,
         method: 'POST',
+        data: refresh_token,
       },
       api,
       extraOptions

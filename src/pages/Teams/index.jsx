@@ -5,27 +5,17 @@ import { useModal } from '@/hooks'
 import Modals from './Modals'
 import { Create } from './Modals/Create'
 import ActionButtons from '@/shared/components/ActionButtons'
+import { ActionTypes } from '@/shared/constants/actionTypes'
 import { viewBtn, editBtn, deleteBtn } from '@/shared/media'
 import styles from '@/styles/table.module.scss'
 
-function Teams() {
+function Teams({ role }) {
   const { data: teams } = useGetTeamsQuery() || []
   const [deleteTeam] = useDeleteTeamMutation()
 
-  const { isOpen, setOpen, openModal, closeModal } = useModal()
+  const { isOpen, setOpen, modalState, setModalState } = useModal()
 
   const [actionType, setActionType] = useState(null)
-
-  const [modalState, setModalState] = useState({
-    filter: false,
-    create: false,
-  })
-  const [tableParams, setTableParams] = useState({
-    pagination: {
-      current: 1,
-      pageSize: 10,
-    },
-  })
 
   const actions = ['view', 'edit', 'delete']
   const icons = [viewBtn, editBtn, deleteBtn]
@@ -36,21 +26,6 @@ function Teams() {
       key: item?.team_id,
     }))
   }, [teams])
-
-  const handleTableChange = (pagination, filters, sorter) => {
-    setTableParams({
-      pagination,
-      filters,
-      ...sorter,
-    })
-  }
-
-  const ActionTypes = {
-    VIEW: 'view',
-    EDIT: 'edit',
-    DELETE: 'delete',
-    RESET_PASSWORD: 'resetPassword',
-  }
 
   const handleAction = (action, record) => {
     const actionConfig = {
@@ -85,6 +60,8 @@ function Teams() {
       key: 'actions',
       render: (_, record) => (
         <ActionButtons
+          key='buttons'
+          role={role}
           actions={actions}
           icons={icons}
           handleAction={handleAction}
@@ -124,10 +101,6 @@ function Teams() {
           </div>
         )}
         dataSource={updateData}
-        onChange={handleTableChange}
-        pagination={{
-          ...tableParams.pagination,
-        }}
       />
     </>
   )
