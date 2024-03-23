@@ -17,7 +17,6 @@ export const projectsApi = createApi({
         })
 
         const url = `projects/search?${queryParams.toString()}`
-        console.log(url)
         return { url }
       },
       providesTags: VALIDATOR,

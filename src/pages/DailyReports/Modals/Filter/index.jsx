@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useGetUsersQuery } from '@/redux/api/user'
 import { useGetProjectsQuery } from '@/redux/api/projects'
 import { useModal } from '@/hooks'
-import { Button, Divider, Drawer, Flex, Select } from 'antd'
+import { Button, Divider, Drawer, Flex, Select, Tooltip } from 'antd'
 import { DatePicker } from 'antd'
 import filter from '@/shared/media/imgs/filter.svg'
 const { RangePicker } = DatePicker
@@ -18,6 +18,7 @@ const Filter = ({
   const [projectName, setProjectName] = useState('')
   const { data: projects } = useGetProjectsQuery({
     page: pageState.current,
+    pageSize: null,
     projectName: projectName,
   })
 
@@ -38,13 +39,15 @@ const Filter = ({
 
   return (
     <>
-      <button
-        className='filter_btn'
-        type='primary'
-        onClick={() => setModalOpen(true)}
-      >
-        <img src={filter} alt='filter' />
-      </button>
+      <Tooltip placement='bottom' title={'Filter'}>
+        <button
+          className='filter_btn'
+          type='primary'
+          onClick={() => setModalOpen(true)}
+        >
+          <img src={filter} alt='filter' />
+        </button>
+      </Tooltip>
       <Drawer
         centered
         open={modalOpen}
@@ -100,11 +103,11 @@ const Filter = ({
           <Divider style={{ margin: '7px' }} />
         </Flex>
         <div className='buttons_'>
-          <Button className='submit_btn' onClick={reset}>
+          <Button className='submit_btn reset' onClick={reset}>
             Reset
           </Button>
           <Button
-            className='submit_btn'
+            className='submit_btn filter'
             key='yes'
             htmlType='submit'
             onClick={onSubmit}

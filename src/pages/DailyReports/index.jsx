@@ -41,7 +41,6 @@ const DailyReports = ({ role }) => {
     !checkEmployee &&
     useGetFilterExportReportQuery({
       page: pageState.current,
-      pageSize: pageState.pageSize,
       ...values,
     })
 

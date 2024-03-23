@@ -11,9 +11,10 @@ const ActionButtons = ({ role, actions, icons, handleAction, record }) => {
       {actions.map((action, index) => (
         <Button
           key={action}
-          className={styles[action]}
+          className={
+            checkHead && action !== 'view' ? styles.hide : styles[action]
+          }
           onClick={() => handleAction(action, record)}
-          disabled={checkHead && action !== 'view'}
         >
           {action === 'delete' ? (
             <img src={icons[index]} alt={action} />

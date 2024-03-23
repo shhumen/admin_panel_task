@@ -1,6 +1,5 @@
 import React from 'react'
 import { Pagination } from 'antd'
-import styles from './style.module.scss'
 
 const CustomPagination = ({
   totalElements,

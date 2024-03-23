@@ -16,15 +16,15 @@ export const otpApi = createApi({
           data: email,
         }
       },
-      invalidatesTags: VALIDATOR,
       async onQueryStarted(_, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
           toast.success(data.msg)
         } catch (error) {
-          return error
+          toast.error(error.message)
         }
       },
+      invalidatesTags: VALIDATOR,
     }),
     verifyOtp: builder.mutation({
       query: (otp) => {

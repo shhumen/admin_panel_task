@@ -71,11 +71,15 @@ const Employee = ({ role }) => {
 
   const handleAction = (action, record) => {
     const actionConfig = {
+      // {"view" :{type:"view"}}
+
       [ActionTypes.VIEW]: { type: ActionTypes.VIEW },
       [ActionTypes.EDIT]: { type: ActionTypes.EDIT },
       [ActionTypes.DELETE]: { type: ActionTypes.DELETE },
       [ActionTypes.RESET_PASSWORD]: { type: ActionTypes.RESET_PASSWORD },
     }
+
+    console.log(actionConfig, 'config action')
 
     const config = actionConfig[action]
     if (config) {
@@ -86,6 +90,7 @@ const Employee = ({ role }) => {
       })
     }
   }
+  console.log(actionType, 'action type')
 
   const handleDeleteEmployee = async () => {
     await deleteUser(actionType?.userId)
@@ -122,7 +127,7 @@ const Employee = ({ role }) => {
       dataIndex: 'status',
       key: 'status',
       render: (text, record) => (
-        <span
+        <button
           style={{ cursor: 'pointer' }}
           onClick={() =>
             handleChangeStatus({ user_id: record.key, currentStatus: text })
@@ -130,7 +135,7 @@ const Employee = ({ role }) => {
           className={text === 'ACTIVE' ? styles.active : styles.deactive}
         >
           {text}
-        </span>
+        </button>
       ),
     },
     {

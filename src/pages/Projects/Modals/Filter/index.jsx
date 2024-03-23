@@ -1,6 +1,6 @@
 import React from 'react'
 import filter from '@/shared/media/imgs/filter.svg'
-import { Button, Divider, Drawer, Flex, Form, Input } from 'antd'
+import { Button, Divider, Drawer, Flex, Form, Input, Tooltip } from 'antd'
 import { validateMessages } from '@/validation'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -24,13 +24,15 @@ function Filter({ modalOpen, setModalOpen, setProjectName }) {
 
   return (
     <>
-      <button
-        className='filter_btn'
-        type='primary'
-        onClick={() => setModalOpen(true)}
-      >
-        <img src={filter} alt='filter' />
-      </button>
+      <Tooltip placement='bottom' title={'Filter'}>
+        <button
+          className='filter_btn'
+          type='primary'
+          onClick={() => setModalOpen(true)}
+        >
+          <img src={filter} alt='filter' />
+        </button>
+      </Tooltip>
       <Drawer
         centered
         open={modalOpen}
@@ -61,10 +63,10 @@ function Filter({ modalOpen, setModalOpen, setProjectName }) {
           </Flex>
           <Divider />
           <div className='buttons_'>
-            <Button className='submit_btn' onClick={() => reset()}>
+            <Button className='submit_btn reset' onClick={() => reset()}>
               Reset
             </Button>
-            <Button className='submit_btn' key='yes' htmlType='submit'>
+            <Button className='submit_btn filter' key='yes' htmlType='submit'>
               Filter
             </Button>
           </div>

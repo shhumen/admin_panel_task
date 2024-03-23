@@ -30,6 +30,6 @@ const EmplyoeeModal = ({
       />
     ),
   }
-  return teamsActions[actionType?.type] || null
+  return teamsActions[actionType?.type] || null // view
 }
 export default EmplyoeeModal

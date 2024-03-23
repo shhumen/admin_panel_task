@@ -9,6 +9,10 @@
   font-family: 'Lexend', sans-serif !important;
 }
 
+.hide {
+  display: none;
+}
+
 ::-webkit-scrollbar {
   display: none;
 }
@@ -149,6 +153,13 @@ body {
   color: var(--primary-text-color);
 }
 
+.ant-popover-content {
+  .anticon:hover svg,
+  .anticon svg {
+    color: red !important;
+  }
+}
+
 .ant-btn.ant-btn-icon-only {
   background-color: var(--primary-color);
   color: var(--primary-text-color) !important;
@@ -236,6 +247,13 @@ button {
 .buttons_ {
   @include flexBox(flex-end);
   padding: 30px 60px;
+  .filter {
+    background-color: var(--secondary-color-two) !important;
+    border: none;
+    span {
+      color: #fff;
+    }
+  }
   button {
     border: 1px solid var(--secondary-color);
     margin: 0 5px;
@@ -277,6 +295,19 @@ button {
   img {
     width: 30px;
     height: 30px;
+  }
+}
+
+.warning {
+  background-color: red !important;
+  span {
+    color: #fff !important;
+  }
+  &:hover {
+    background-color: rgb(255, 90, 101) !important;
+    span {
+      color: #fff !important;
+    }
   }
 }
 
@@ -340,6 +371,15 @@ button {
   background-color: var(--secondary-color) !important;
   .ant-modal-header {
     background-color: var(--secondary-color) !important;
+  }
+}
+
+.ant-popover-content .ant-popover-inner {
+  background-color: var(--secondary-color) !important;
+
+  .ant-popconfirm-message .ant-popconfirm-description,
+  .ant-popconfirm-message .ant-popconfirm-title {
+    color: var(--primary-text-color) !important;
   }
 }
 

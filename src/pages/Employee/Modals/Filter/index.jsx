@@ -1,20 +1,18 @@
-import { Button, Divider, Drawer, Flex } from 'antd'
+import { Button, Divider, Drawer, Flex, Tooltip } from 'antd'
 import React from 'react'
 import filter from '@/shared/media/imgs/filter.svg'
-import styles from './style.module.scss'
 import { Input, Select } from 'antd'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { filterEmployeeSchema } from '@/validation'
-import { useGetRolesQuery } from '@/redux/api/roles'
 import { useGetTeamsQuery } from '@/redux/api/teams'
-import { useSelector } from 'react-redux'
+import { useModal } from '@/hooks'
 import { useGetProjectsQuery } from '@/redux/api/projects'
 
 const Filter = ({ setUser, modalOpen, setModalOpen }) => {
-  const { data: roles } = useGetRolesQuery()
+  const { pageState } = useModal()
   const { data: projects } = useGetProjectsQuery({
-    page: 1,
+    page: pageState.current,
   })
   const { data: teams } = useGetTeamsQuery()
   const {
@@ -41,13 +39,15 @@ const Filter = ({ setUser, modalOpen, setModalOpen }) => {
 
   return (
     <>
-      <button
-        className='filter_btn'
-        type='primary'
-        onClick={() => setModalOpen(true)}
-      >
-        <img src={filter} alt='filter' />
-      </button>
+      <Tooltip placement='bottom' title={'Filter'}>
+        <button
+          className='filter_btn'
+          type='primary'
+          onClick={() => setModalOpen(true)}
+        >
+          <img src={filter} alt='filter' />
+        </button>
+      </Tooltip>
       <Drawer
         centered
         open={modalOpen}
@@ -134,10 +134,10 @@ const Filter = ({ setUser, modalOpen, setModalOpen }) => {
           </Flex>
           <br />
           <div className='buttons_'>
-            <Button className='submit_btn' onClick={() => reset()}>
+            <Button className='submit_btn reset' onClick={() => reset()}>
               Reset
             </Button>
-            <Button className='submit_btn' key='yes' htmlType='submit'>
+            <Button className='submit_btn filter' key='yes' htmlType='submit'>
               Filter
             </Button>
           </div>

@@ -24,14 +24,14 @@ export const validateMessages = {
 export const createEmployeeSchema = z.object({
   firstname: z
     .string()
-    .max(20)
+    .max(50)
     .refine(
       (value) => /^[a-zA-Z]+[-'s]?[a-zA-Z ]+$/.test(value),
       'Firstname should contain only alphabets'
     ),
   lastname: z
     .string()
-    .max(20)
+    .max(50)
     .refine(
       (value) => /^[a-zA-Z]+[-'s]?[a-zA-Z ]+$/.test(value),
       'Lastname should contain only alphabets'
@@ -39,7 +39,7 @@ export const createEmployeeSchema = z.object({
   email: z
     .string()
     .email()
-    .max(40)
+    .max(100)
     .refine((value) => value.endsWith('@crocusoft.com'), {
       message: 'Email must end with @crocusoft.com',
     }),

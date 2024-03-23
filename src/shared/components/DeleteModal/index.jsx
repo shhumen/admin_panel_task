@@ -12,7 +12,7 @@ const DeleteModal = ({ isOpen, setOpen, entityname, onDelete }) => {
 
   return (
     <Modal
-      title={`Are you sure to delete ${entityname}?`}
+      title={`Are you sure to delete this ${entityname}?`}
       centered
       open={isOpen}
       onOk={handleDelete}
