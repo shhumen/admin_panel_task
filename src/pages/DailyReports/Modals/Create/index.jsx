@@ -2,10 +2,7 @@ import React, { useState } from 'react'
 import { Button, Divider, Flex, Form, Modal, Select } from 'antd'
 import { create } from '@/shared/media'
 import { useGetProjectsQuery } from '@/redux/api/projects'
-import {
-  useCreateReportMutation,
-  useGetReportsByIdQuery,
-} from '@/redux/api/reports'
+import { useCreateReportMutation } from '@/redux/api/reports'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { Controller, useForm } from 'react-hook-form'

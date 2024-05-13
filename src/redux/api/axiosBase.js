@@ -27,7 +27,6 @@
 //       }
 //     }
 //   }
-
 // export const APIBaseQueryInterceptor = axiosBaseQuery({
 //   baseURL: baseURL,
 //   headers: (headers, { getState }) => {
@@ -38,7 +37,6 @@
 //     return headers
 //   },
 // })
-
 // export const APIBaseQuery = async (args, api, extraOptions) => {
 //   let result = await APIBaseQueryInterceptor(args, api, extraOptions)
 //   if (result.error && result.error.status === ErrorCode.UNAUTHORIZED) {
@@ -46,7 +44,6 @@
 //     const userState = state.getState()
 //     const { auth } = userState
 //     const { user_id, access_token, refresh_token, expired_date } = auth
-
 //     const refreshResult = await APIBaseQueryInterceptor(
 //       {
 //         url: 'http://localhost:8081/v1/api/auth/refresh-token',
@@ -76,7 +73,6 @@
 //         'Xəta baş verdi'
 //     )
 //   }
-
 //   return result
 // }
 
